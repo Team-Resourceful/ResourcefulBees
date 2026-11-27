@@ -1,5 +1,5 @@
 {
-  "specialAbilities": ["teleport"],
+  "specialAbilities": ["resourcefulbees:teleport"],
   "particleType": ["minecraft:portal"],
   "displayItem": "minecraft:ender_pearl"
 }

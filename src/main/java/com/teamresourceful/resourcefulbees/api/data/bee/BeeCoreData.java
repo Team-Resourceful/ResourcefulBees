@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
 import com.teamresourceful.resourcefulbees.api.data.shared.RegistryPredicate;
 import com.teamresourceful.resourcefulbees.api.registry.HoneycombRegistry;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -16,7 +17,7 @@ import java.util.Optional;
 @NullMarked
 public interface BeeCoreData extends BeeData<BeeCoreData> {
 
-    String honeycomb();
+    Identifier honeycomb();
 
     RegistryPredicate<Block> blockFlowers();
 
@@ -43,6 +44,6 @@ public interface BeeCoreData extends BeeData<BeeCoreData> {
     List<Component> lore();
 
     default Optional<OutputVariation> getHoneycombData() {
-        return Optional.ofNullable(HoneycombRegistry.get().getHoneycomb(honeycomb()));
+        return Optional.ofNullable(HoneycombRegistry.get().getHoneycombVariation(honeycomb()));
     }
 }

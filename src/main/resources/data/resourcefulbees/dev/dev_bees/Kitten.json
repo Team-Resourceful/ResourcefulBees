@@ -27,7 +27,7 @@
     }
   },
   "resourcefulbees:trait/v1": {
-    "traits": [ "kitten" ]
+    "traits": [ "resourcefulbees:kitten" ]
   },
   "resourcefulbees:combat/v1": {
     "removeStingerOnAttack": false,

@@ -22,15 +22,6 @@ public class BeekeeperArmorItem extends Item implements GeoItem {
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
-    private final GeoRenderProvider provider = new GeoRenderProvider() {
-        private final Supplier<GeoArmorRenderer<BeekeeperArmorItem, HumanoidRenderState>> renderer = Suppliers.memoize(BeekeeperArmorRenderer::new);
-
-        @Override
-        public @Nullable GeoArmorRenderer<?, ?> getGeoArmorRenderer(@NonNull ItemStack itemStack, @NonNull EquipmentSlot equipmentSlot) {
-            return this.renderer.get();
-        }
-    };
-
     public BeekeeperArmorItem(Properties properties) {
         super(properties);
     }
@@ -47,11 +38,14 @@ public class BeekeeperArmorItem extends Item implements GeoItem {
 
     @Override
     public void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {
-        consumer.accept(this.provider);
+        consumer.accept(new GeoRenderProvider() {
+            private final Supplier<GeoArmorRenderer<BeekeeperArmorItem, HumanoidRenderState>> renderer = Suppliers.memoize(BeekeeperArmorRenderer::new);
+
+            @Override
+            public @Nullable GeoArmorRenderer<?, ?> getGeoArmorRenderer(@NonNull ItemStack itemStack, @NonNull EquipmentSlot equipmentSlot) {
+                return this.renderer.get();
+            }
+        });
     }
 
-    @Override
-    public @NonNull GeoRenderProvider getRenderProvider() {
-        return this.provider;
-    }
 }

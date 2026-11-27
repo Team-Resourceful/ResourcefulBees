@@ -1,0 +1,21 @@
+{
+  "honeycomb": {
+    "color": "#303030",
+    "edible": true,
+    "block": true,
+    "tradeData": {}
+  },
+  "variations": [
+    {
+      "identifier": "resourcefulbees_test:coal",
+      "defaultComb": {"id":  "resourcefulbees_test:gametest_json_honeycomb"},
+      "defaultCombBlock": {"id":  "resourcefulbees_test:gametest_json_honeycomb_block"},
+      "apiaryCombs": {
+        "resourcefulbees:t1": {"id":  "resourcefulbees_test:gametest_json_honeycomb", "count":  1},
+        "resourcefulbees:t2": {"id":  "resourcefulbees_test:gametest_json_honeycomb", "count":  2},
+        "resourcefulbees:t3": {"id":  "resourcefulbees_test:gametest_json_honeycomb_block", "count":  3},
+        "resourcefulbees:t4": {"id":  "resourcefulbees_test:gametest_json_honeycomb_block", "count":  4}
+      }
+    }
+  ]
+}

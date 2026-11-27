@@ -7,7 +7,9 @@ import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBl
 import com.teamresourceful.resourcefulbees.common.blockentities.base.IOResourceHandler;
 import com.teamresourceful.resourcefulbees.common.blocks.ApiaryBlock;
 import com.teamresourceful.resourcefulbees.common.components.Upgrade;
+import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.items.PollenItem;
+import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
 import com.teamresourceful.resourcefulbees.common.menus.ApiaryMenu;
@@ -25,7 +27,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -76,20 +77,16 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity {
         }
     }
 
-    public int getMaxTimeInHive(@NotNull BeeCompat bee) {
-        return (int) (bee.resourcefulBees$getMaxTimeInHive() * tier.timeMod());
-    }
-
-    public static void serverTick(Level level, BlockPos pos, BlockState state, ApiaryBlockEntity apiaryTile) {
-        BeeHolderBlockEntity.serverTick(level, pos, state, apiaryTile);
+    public int getMaxTimeInHive(@NotNull BeeCompat bee, boolean hasNectar) {
+        return (int) ((hasNectar ? BeeConstants.MIN_HIVE_TIME : bee.resourcefulBees$getMaxTimeInHive()) * tier.timeMod());
     }
 
     public boolean hasSpace() {
         return this.bees.size() < tier.maxBees();
     }
 
-    public boolean isAllowedBee() {
-        return getBlockState().getBlock() instanceof ApiaryBlock;
+    public boolean isAllowedBee(@Nullable ResourcefulBee bee) {
+        return getBlockState().getBlock() instanceof ApiaryBlock && bee != null;
     }
     //endregion
 

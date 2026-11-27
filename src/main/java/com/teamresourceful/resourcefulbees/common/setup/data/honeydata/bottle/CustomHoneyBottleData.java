@@ -12,11 +12,12 @@ import com.teamresourceful.resourcefullib.common.codecs.EnumCodec;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 
 public record CustomHoneyBottleData(
-        String id,
+        Identifier id,
         Color color,
         HoneyFoodData food,
         Rarity rarity,
@@ -24,14 +25,14 @@ public record CustomHoneyBottleData(
         BeekeeperTradeData tradeData
 ) implements HoneyBottleData {
 
-    private static Codec<HoneyBottleData> codec(String id) {
+    private static Codec<HoneyBottleData> codec(Identifier id) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 RecordCodecBuilder.point(id),
                 Color.CODEC.optionalFieldOf("color", Color.DEFAULT).forGetter(HoneyBottleData::color),
                 CustomHoneyFoodData.CODEC.optionalFieldOf("food", CustomHoneyFoodData.DEFAULT).forGetter(HoneyBottleData::food),
                 EnumCodec.of(Rarity.class).optionalFieldOf("rarity", Rarity.COMMON).forGetter(HoneyBottleData::rarity),
                 TradeData.CODEC.optionalFieldOf("tradeData", TradeData.DEFAULT).forGetter(HoneyBottleData::tradeData)
-        ).apply(instance, (s, color1, honeyFoodData, rarity1, beekeeperTradeData) -> new CustomHoneyBottleData(s, color1, honeyFoodData, rarity1, LazyHolder.of(BuiltInRegistries.ITEM, ModIdentifier.of(id + "_honey_bottle")), beekeeperTradeData)));
+        ).apply(instance, (s, color1, honeyFoodData, rarity1, beekeeperTradeData) -> new CustomHoneyBottleData(s, color1, honeyFoodData, rarity1, LazyHolder.of(BuiltInRegistries.ITEM, id.withSuffix("_honey_bottle")), beekeeperTradeData)));
     }
     public static final HoneyDataSerializer<HoneyBottleData> SERIALIZER = HoneyDataSerializer.of(ModIdentifier.of("bottle"), 1, CustomHoneyBottleData::codec);
 

@@ -2,8 +2,8 @@ package com.teamresourceful.resourcefulbees.common.registries.custom;
 
 import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import net.minecraft.resources.Identifier;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -13,8 +13,7 @@ public final class TraitRegistry implements com.teamresourceful.resourcefulbees.
 
     private static final TraitRegistry INSTANCE = new TraitRegistry();
 
-    private final HashMap<String, Trait> registry = new HashMap<>();
-    private boolean closed = false;
+    private volatile Map<Identifier, Trait> registry = Map.of();
 
     private TraitRegistry() {
     }
@@ -27,23 +26,26 @@ public final class TraitRegistry implements com.teamresourceful.resourcefulbees.
     }
 
     @Override
-    public boolean register(String name, Trait data) {
-        if (closed || registry.containsKey(name)) {
-            ModConstants.LOGGER.error("Trait is already registered or registration is closed: {}", name);
+    public synchronized boolean register(Identifier name, Trait data) {
+        if (registry.containsKey(name)) {
+            ModConstants.LOGGER.error("Trait is already registered: {}", name);
             return false;
         }
-        registry.put(name, data);
+
+        Map<Identifier, Trait> updated = new HashMap<>(registry);
+        updated.put(name, data);
+        registry = Map.copyOf(updated);
         return true;
     }
 
     @Override
-    public Trait getTrait(String name) {
+    public Trait getTrait(Identifier name) {
         return registry.getOrDefault(name, Trait.DEFAULT);
     }
 
     @Override
-    public Map<String, Trait> getTraits() {
-        return Collections.unmodifiableMap(registry);
+    public Map<Identifier, Trait> getTraits() {
+        return registry;
     }
 
     @Override
@@ -56,10 +58,8 @@ public final class TraitRegistry implements com.teamresourceful.resourcefulbees.
         return getSetOfTraits().stream();
     }
 
-    /**
-     * Closes the registry and prevents any further registrations.
-     */
-    public void close() {
-        this.closed = true;
+    public synchronized void replace(Map<Identifier, Trait> traits) {
+        registry = Map.copyOf(traits);
+        ModConstants.LOGGER.info("Loaded {} traits.", registry.size());
     }
 }

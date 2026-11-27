@@ -9,14 +9,17 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
+import com.teamresourceful.resourcefulbees.common.registries.compat.NamespacedItemRegistry;
+import com.teamresourceful.resourcefulbees.common.registries.compat.NamespacedItemRegistryChild;
+import com.teamresourceful.resourcefulbees.common.registries.compat.NamespacedRegistration;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
+import com.teamresourceful.resourcefullib.common.fluid.ResourcefulBucketItem;
 import com.teamresourceful.resourcefullib.common.registry.HolderRegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
-import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
-import com.teamresourceful.resourcefullib.common.registry.builtin.ResourcefulItemRegistry;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -40,35 +43,39 @@ public final class ModItems {
         throw new UtilityClassException();
     }
 
-    public static final ResourcefulItemRegistry ITEMS = ResourcefulRegistries.createForItems(ModConstants.MOD_ID);
+    public static final NamespacedItemRegistry ITEMS = new NamespacedItemRegistry(ModConstants.MOD_ID);
 
-    public static final ResourcefulItemRegistry NEST_ITEMS = ResourcefulRegistries.createForItems(ITEMS);
-    public static final ResourcefulItemRegistry T1_NEST_ITEMS = ResourcefulRegistries.createForItems(NEST_ITEMS);
-    public static final ResourcefulItemRegistry T2_NEST_ITEMS = ResourcefulRegistries.createForItems(NEST_ITEMS);
-    public static final ResourcefulItemRegistry T3_NEST_ITEMS = ResourcefulRegistries.createForItems(NEST_ITEMS);
-    public static final ResourcefulItemRegistry T4_NEST_ITEMS = ResourcefulRegistries.createForItems(NEST_ITEMS);
+    public static final NamespacedItemRegistryChild NEST_ITEMS = new NamespacedItemRegistryChild(ITEMS);
+    public static final NamespacedItemRegistryChild T1_NEST_ITEMS = new NamespacedItemRegistryChild(NEST_ITEMS);
+    public static final NamespacedItemRegistryChild T2_NEST_ITEMS = new NamespacedItemRegistryChild(NEST_ITEMS);
+    public static final NamespacedItemRegistryChild T3_NEST_ITEMS = new NamespacedItemRegistryChild(NEST_ITEMS);
+    public static final NamespacedItemRegistryChild T4_NEST_ITEMS = new NamespacedItemRegistryChild(NEST_ITEMS);
 
-    public static final ResourcefulItemRegistry SPAWN_EGG_ITEMS = ResourcefulRegistries.createForItems(ITEMS);
-    public static final ResourcefulItemRegistry HONEYCOMB_ITEMS = ResourcefulRegistries.createForItems(ITEMS);
-    public static final ResourcefulItemRegistry HONEYCOMB_BLOCK_ITEMS = ResourcefulRegistries.createForItems(ITEMS);
-    public static final ResourcefulItemRegistry HONEY_BOTTLE_ITEMS = ResourcefulRegistries.createForItems(ITEMS);
-    public static final ResourcefulItemRegistry HONEY_BLOCK_ITEMS = ResourcefulRegistries.createForItems(ITEMS);
-    public static final ResourcefulItemRegistry HONEY_BUCKET_ITEMS = ResourcefulRegistries.createForItems(ITEMS);
+    public static final NamespacedItemRegistryChild SPAWN_EGG_ITEMS = new NamespacedItemRegistryChild(ITEMS);
+    public static final NamespacedItemRegistryChild HONEYCOMB_ITEMS = new NamespacedItemRegistryChild(ITEMS);
+    public static final NamespacedItemRegistryChild HONEYCOMB_BLOCK_ITEMS = new NamespacedItemRegistryChild(ITEMS);
+    public static final NamespacedItemRegistryChild HONEY_BOTTLE_ITEMS = new NamespacedItemRegistryChild(ITEMS);
+    public static final NamespacedItemRegistryChild HONEY_BLOCK_ITEMS = new NamespacedItemRegistryChild(ITEMS);
+    public static final NamespacedItemRegistryChild HONEY_BUCKET_ITEMS = new NamespacedItemRegistryChild(ITEMS);
 
-    private static HolderRegistryEntry<Item> registerBasicBlockItem(ResourcefulItemRegistry registry, String id, RegistryEntry<Block> block, Supplier<Item.Properties> getter) {
+    private static HolderRegistryEntry<Item> registerBasicBlockItem(NamespacedRegistration<Item> registry, String id, RegistryEntry<Block> block, Supplier<Item.Properties> getter) {
         return registerBlockItem(registry, id, block, BlockItem::new, getter);
     }
 
-    private static HolderRegistryEntry<Item> registerBlockItem(ResourcefulItemRegistry registry, String id, RegistryEntry<Block> block, BiFunction<Block, Item.Properties, Item> factory, Supplier<Item.Properties> getter) {
+    private static HolderRegistryEntry<Item> registerBlockItem(NamespacedRegistration<Item> registry, String id, RegistryEntry<Block> block, BiFunction<Block, Item.Properties, Item> factory, Supplier<Item.Properties> getter) {
         return registerItem(registry, id, properties -> factory.apply(block.get(), properties), getter);
     }
 
-    private static HolderRegistryEntry<Item> registerItem(ResourcefulItemRegistry registry, String id, Function<Item.Properties, Item> factory, Supplier<Item.Properties> getter) {
-        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, ModIdentifier.of(id));
+    private static HolderRegistryEntry<Item> registerItem(NamespacedRegistration<Item> registry, String id, Function<Item.Properties, Item> factory, Supplier<Item.Properties> getter) {
+        return registerItem(registry, Identifier.fromNamespaceAndPath(registry.namespace(), id), factory, getter);
+    }
+
+    private static HolderRegistryEntry<Item> registerItem(NamespacedRegistration<Item> registry, Identifier id, Function<Item.Properties, Item> factory, Supplier<Item.Properties> getter) {
+        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, id);
         return registry.registerHolder(id, () -> factory.apply(getter.get().setId(key)));
     }
 
-    public static void registerHiveItem(ResourcefulItemRegistry registry, String id, RegistryEntry<Block> block, int tier) {
+    public static void registerHiveItem(NamespacedRegistration<Item> registry, String id, RegistryEntry<Block> block, int tier) {
         registerBasicBlockItem(registry, id, block, () -> new Item.Properties()
                 .component(ModDataComponents.HIVE_BEES, HiveBees.EMPTY)
                 .component(DataComponents.BLOCK_STATE, BlockItemStateProperties.EMPTY.with(BeehiveBlock.HONEY_LEVEL, 0))
@@ -125,6 +132,9 @@ public final class ModItems {
     public static final HolderRegistryEntry<Item> T4_NEST_UPGRADE = registerItem(ITEMS, "t4_nest_upgrade", Item::new, () -> new Item.Properties().stacksTo(16).component(ModDataComponents.BEEHIVE_UPGRADE, BeehiveUpgrade.create(BeehiveUpgrade.Tier.T3_TO_T4)));
     public static final HolderRegistryEntry<Item> BREED_TIME_UPGRADE = registerItem(ITEMS, "breed_time_upgrade", Item::new, () -> new Item.Properties().stacksTo(8).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.BREED_TIME)));
     public static final HolderRegistryEntry<Item> APIARY_POLLEN_UPGRADE = registerItem(ITEMS, "apiary_pollen_upgrade", Item::new, () -> new Item.Properties().stacksTo(8).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.APIARY_POLLEN)));
+    public static final HolderRegistryEntry<Item> COLONY_RADIUS_UPGRADE = registerItem(ITEMS, "colony_radius_upgrade", Item::new, () -> new Item.Properties().stacksTo(4).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.COLONY_RADIUS)));
+    public static final HolderRegistryEntry<Item> COLONY_ROUTE_UPGRADE = registerItem(ITEMS, "colony_route_upgrade", Item::new, () -> new Item.Properties().stacksTo(4).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.COLONY_ROUTES)));
+    public static final HolderRegistryEntry<Item> COLONY_BEE_UPGRADE = registerItem(ITEMS, "colony_bee_upgrade", Item::new, () -> new Item.Properties().stacksTo(4).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.COLONY_BEES)));
 
     public static final HolderRegistryEntry<Item> HONEYCOMB_POTTERY_SHERD = registerItem(ITEMS, "honeycomb_pottery_sherd", Item::new, () -> new Item.Properties().potPattern(ModDecoratedPotPatterns.HONEYCOMB));
     public static final HolderRegistryEntry<Item> BEE_POTTERY_SHERD = registerItem(ITEMS, "bee_pottery_sherd", Item::new, () -> new Item.Properties().potPattern(ModDecoratedPotPatterns.BEE));
@@ -167,7 +177,7 @@ public final class ModItems {
     public static final HolderRegistryEntry<Item> HONEY_GENERATOR_ITEM = registerBasicBlockItem(ITEMS, "honey_generator", ModBlocks.HONEY_GENERATOR, Item.Properties::new);
     //endregion
 
-    public static final HolderRegistryEntry<Item> HONEY_BUCKET = registerItem(HONEY_BUCKET_ITEMS, "honey_bucket", properties -> new BucketItem(ModFluids.HONEY_FLUID_TYPE.get().still().get(), properties), () -> new Item.Properties().stacksTo(1));
+    public static final HolderRegistryEntry<Item> HONEY_BUCKET = registerItem(HONEY_BUCKET_ITEMS, "honey_bucket", properties -> new ResourcefulBucketItem(ModFluids.HONEY_FLUID_TYPE.get(), properties), () -> new Item.Properties().stacksTo(1));
 
     //region Special Items
     public static final FoodProperties OREO_FOOD_PROPERTIES = new FoodProperties(8, 2f, true);
@@ -198,4 +208,6 @@ public final class ModItems {
     public static final ResourceKey<Item> STRAWBEERRY_MILKSHAKE_KEY = ResourceKey.create(Registries.ITEM, ModIdentifier.of("strawbeerry_milkshake"));
 
     public static final HolderRegistryEntry<Item> STRAWBEERRY_MILKSHAKE = ITEMS.registerHolder("strawbeerry_milkshake", () -> new Item(new Item.Properties().rarity(Rarity.EPIC).food(STRAWBEERRY_MILKSHAKE_PROPERTIES, STRAWBEERRY_MILKSHAKE_CONSUMABLE).setId(STRAWBEERRY_MILKSHAKE_KEY)));
+
+    public static final HolderRegistryEntry<Item> COLONY_CONTROLLER = registerBlockItem(ITEMS, "colony_controller", ModBlocks.COLONY_CONTROLLER, BlockItem::new, Item.Properties::new);
 }

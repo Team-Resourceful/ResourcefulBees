@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public interface CustomHoneyData {
 
-    String name();
+    Identifier name();
 
     Map<Identifier, HoneyData<?>> data();
 

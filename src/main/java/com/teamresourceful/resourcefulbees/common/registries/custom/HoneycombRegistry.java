@@ -3,9 +3,9 @@ package com.teamresourceful.resourcefulbees.common.registries.custom;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
+import com.teamresourceful.resourcefulbees.api.data.honeycomb.HoneycombDefinition;
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
+import com.teamresourceful.resourcefulbees.api.registry.HoneycombRegistration;
 import com.teamresourceful.resourcefulbees.common.blocks.HoneycombBlock;
 import com.teamresourceful.resourcefulbees.common.config.ApiaryConfig;
 import com.teamresourceful.resourcefulbees.common.config.HoneycombConfig;
@@ -16,8 +16,6 @@ import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.setup.data.beedata.TradeData;
-import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -37,8 +35,9 @@ import java.util.stream.Stream;
 public final class HoneycombRegistry implements com.teamresourceful.resourcefulbees.api.registry.HoneycombRegistry {
 
     private static final HoneycombRegistry INSTANCE = new HoneycombRegistry();
-    private static final Map<String, JsonObject> RAW_DATA = new HashMap<>();
-    private static final Map<String, OutputVariation> VARIATION_DATA = new HashMap<>();
+    private static final Map<Identifier, JsonObject> RAW_DATA = new LinkedHashMap<>();
+    private static final List<Supplier<OutputVariation>> JAVA_VARIATIONS = new ArrayList<>();
+    private static final Map<Identifier, OutputVariation> VARIATION_DATA = new LinkedHashMap<>();
     private static final Codec<List<OutputVariation>> VARIATION_CODEC = OutputVariation.CODEC.listOf().fieldOf("variations").orElse(new ArrayList<>()).codec();
     private static boolean itemsRegistered;
 
@@ -55,12 +54,12 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
     }
 
     @Override
-    public boolean containsHoneycomb(String name) {
+    public boolean containsVariation(Identifier name) {
         return VARIATION_DATA.containsKey(name);
     }
 
     @Override
-    public @Nullable OutputVariation getHoneycomb(String identifier) {
+    public @Nullable OutputVariation getHoneycombVariation(Identifier identifier) {
         return VARIATION_DATA.get(identifier);
     }
 
@@ -71,22 +70,22 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
      * @param name The name of the honeycomb being registered.
      * @param honeycombData The raw json data of the honeycomb being registered
      */
-    public void cacheRawHoneycombData(String name, JsonObject honeycombData) {
-        RAW_DATA.computeIfAbsent(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), s -> Objects.requireNonNull(honeycombData));
+    public void cacheRawHoneycombData(Identifier name, JsonObject honeycombData) {
+        RAW_DATA.computeIfAbsent(name, s -> Objects.requireNonNull(honeycombData));
     }
 
     @Override
-    public Set<OutputVariation> getSetOfHoneycombs() {
+    public Set<OutputVariation> getSetOfVariations() {
         return Set.copyOf(VARIATION_DATA.values());
     }
 
     @Override
-    public Stream<OutputVariation> getStreamOfHoneycombs() {
-        return getSetOfHoneycombs().stream();
+    public Stream<OutputVariation> getStreamOfVariations() {
+        return getSetOfVariations().stream();
     }
 
     @Override
-    public Set<String> getHoneycombTypes() {
+    public Set<Identifier> getVariationIDs() {
         return Set.copyOf(VARIATION_DATA.keySet());
     }
 
@@ -95,9 +94,18 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
     public void regenerateVariationData() {
         VARIATION_DATA.clear();
         RAW_DATA.forEach(HoneycombRegistry::parseVariationData);
+        for (Supplier<OutputVariation> supplier : JAVA_VARIATIONS) {
+            OutputVariation variation = supplier.get();
+            OutputVariation previous = VARIATION_DATA.putIfAbsent(variation.id(), variation);
+            if (previous != null) {
+                throw new IllegalStateException(
+                        "Duplicate honeycomb variation: " + variation.id()
+                );
+            }
+        }
     }
 
-    private static void parseVariationData(String id, JsonObject jsonObject) {
+    private static void parseVariationData(Identifier id, JsonObject jsonObject) {
         VARIATION_CODEC.parse(JsonOps.INSTANCE, jsonObject)
                 .resultOrPartial(message -> ModConstants.LOGGER.error("Could not create output variation from {} json file: {}", id, message))
                 .ifPresent(outputVariations -> outputVariations.forEach(HoneycombRegistry::computeVariation));
@@ -112,91 +120,111 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
     //region Honeycomb Registration
 
     public static void registerHoneycombItems() {
+        if (itemsRegistered) return;
         RAW_DATA.forEach(HoneycombRegistry::parseRegistryData);
         itemsRegistered = true;
     }
 
-    private static void parseRegistryData(String id, JsonObject jsonObject) {
-        RegistryData.codec(id).optionalFieldOf("honeycomb").codec().parse(JsonOps.INSTANCE, jsonObject)
-                .resultOrPartial(message -> ModConstants.LOGGER.warn("Could not create honeycomb registry item from {} json file: {}", id, message));
+    public static void registerJavaHoneycombs() {
+        for (HoneycombDefinition definition : HoneycombRegistration.drain()) {
+            registerHoneycomb(definition);
+            registerJavaHoneycombVariations(definition);
+        }
+    }
+
+    public static void registerJavaHoneycombVariations(HoneycombDefinition definition) {
+        JAVA_VARIATIONS.addAll(definition.variations());
+    }
+
+    private static void parseRegistryData(Identifier id, JsonObject jsonObject) {
+        HoneycombDefinition.codec(id).optionalFieldOf("honeycomb").codec().parse(JsonOps.INSTANCE, jsonObject)
+                .resultOrPartial(message -> ModConstants.LOGGER.warn("Could not create honeycomb registry item from {} json file: {}", id, message))
+                .flatMap(optional -> optional)
+                .ifPresent(HoneycombRegistry::registerHoneycomb);
     }
 
     @Override
-    public Map<String, OutputVariation> getData() {
+    public Map<Identifier, OutputVariation> getVariationData() {
         return Collections.unmodifiableMap(VARIATION_DATA);
     }
 
-    private record RegistryData(
-            String name,
-            Color color,
-            boolean edible,
-            boolean block,
-            boolean enchanted,
-            BeekeeperTradeData tradeData
-    ) {
-        private static final String HONEYCOMB_BLOCK_SUFFIX = "_honeycomb_block";
-        private static final String HONEYCOMB_SUFFIX = "_honeycomb";
+    private static final String HONEYCOMB_BLOCK_SUFFIX = "_honeycomb_block";
+    private static final String HONEYCOMB_SUFFIX = "_honeycomb";
 
-        private static Codec<RegistryData> codec(String name) {
-            return RecordCodecBuilder.create(instance -> instance.group(
-                    RecordCodecBuilder.point(name),
-                    Color.CODEC.fieldOf("color").orElse(Color.DEFAULT).forGetter(RegistryData::color),
-                    Codec.BOOL.fieldOf("edible").orElse(true).forGetter(RegistryData::edible),
-                    Codec.BOOL.fieldOf("block").orElse(true).forGetter(RegistryData::block),
-                    Codec.BOOL.fieldOf("enchanted").orElse(false).forGetter(RegistryData::enchanted),
-                    TradeData.CODEC.fieldOf("tradeData").orElse(TradeData.DEFAULT).forGetter(RegistryData::tradeData)
-            ).apply(instance, RegistryData::new));
+    private static void registerHoneycomb(HoneycombDefinition definition) {
+        Identifier name = definition.name();
+
+        if (definition.block()) {
+            var customHoneycombBlock = ModBlocks.HONEYCOMB_BLOCKS.register(
+                    name.withSuffix(HONEYCOMB_BLOCK_SUFFIX),
+                    properties -> new HoneycombBlock(
+                            definition.color(),
+                            properties
+                    ),
+                    honeycombBlockProperties(
+                            name.withSuffix(HONEYCOMB_BLOCK_SUFFIX)
+                    )
+            );
+
+            var blockItem = ModItems.HONEYCOMB_BLOCK_ITEMS.register(
+                    name.withSuffix(HONEYCOMB_BLOCK_SUFFIX),
+                    properties -> new BlockItem(
+                            customHoneycombBlock.get(),
+                            properties
+                    ),
+                    props(definition, ItemType.BLOCK)
+            );
+
+            ModItems.HONEYCOMB_ITEMS.register(
+                    name.withSuffix(HONEYCOMB_SUFFIX),
+                    properties -> new CustomHoneycombItem(
+                            definition.color(),
+                            blockItem::get,
+                            definition.tradeData(),
+                            properties
+                    ),
+                    props(definition, ItemType.COMB)
+            );
+        } else {
+            ModItems.HONEYCOMB_ITEMS.register(
+                    name.withSuffix(HONEYCOMB_SUFFIX),
+                    properties -> new CustomHoneycombItem(
+                            definition.color(),
+                            null,
+                            definition.tradeData(),
+                            properties
+                    ),
+                    props(definition, ItemType.COMB)
+            );
         }
-
-        private RegistryData {
-            if (block) {
-                var customHoneycombBlock = ModBlocks.HONEYCOMB_BLOCKS.register(
-                        name + HONEYCOMB_BLOCK_SUFFIX,
-                        properties -> new HoneycombBlock(color, properties),
-                        honeycombBlockProperties(name + HONEYCOMB_BLOCK_SUFFIX)
-                );
-                final var blockItem = ModItems.HONEYCOMB_BLOCK_ITEMS.register(
-                        name + HONEYCOMB_BLOCK_SUFFIX,
-                        properties -> new BlockItem(customHoneycombBlock.get(), properties),
-                        props(ItemType.BLOCK)
-                );
-                ModItems.HONEYCOMB_ITEMS.register(
-                        name + HONEYCOMB_SUFFIX,
-                        properties -> new CustomHoneycombItem(color, blockItem::get, tradeData, properties),
-                        props(ItemType.COMB)
-                );
-            } else {
-                ModItems.HONEYCOMB_ITEMS.register(
-                        name + HONEYCOMB_SUFFIX,
-                        properties -> new CustomHoneycombItem(color, null, tradeData, properties),
-                        props(ItemType.COMB)
-                );
-            }
-        }
-
-        private Supplier<Item.Properties> props(ItemType type) {
-            return () -> {
-                var properties = new Item.Properties();
-                properties.component(ModDataComponents.FALLBACK_ITEM_MODEL.get(), type.getDefaultModel());
-
-                if (this.enchanted) properties.component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
-                if (type == ItemType.COMB && this.edible && HoneycombConfig.honeycombsEdible) {
-                    properties.food(new FoodProperties.Builder()
-                            .nutrition(HoneycombConfig.honeycombHunger)
-                            .saturationModifier(HoneycombConfig.honeycombSaturation)
-                            .alwaysEdible()
-                            .build()
-                    );
-                }
-
-                return properties;
-            };
-        }
-
     }
 
-    private static Supplier<BlockBehaviour.Properties> honeycombBlockProperties(String registryID) {
-        return () -> BlockBehaviour.Properties.ofFullCopy(Blocks.HONEYCOMB_BLOCK).setId(ResourceKey.create(Registries.BLOCK, ModIdentifier.of(registryID)));
+
+    private static Supplier<Item.Properties> props(HoneycombDefinition definition, ItemType type) {
+        return () -> {
+            var properties = new Item.Properties();
+
+            properties.component(ModDataComponents.FALLBACK_ITEM_MODEL.get(), type.getDefaultModel());
+
+            if (definition.enchanted()) {
+                properties.component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
+            }
+
+            if (type == ItemType.COMB && definition.edible() && HoneycombConfig.honeycombsEdible) {
+                properties.food(new FoodProperties.Builder()
+                        .nutrition(HoneycombConfig.honeycombHunger)
+                        .saturationModifier(HoneycombConfig.honeycombSaturation)
+                        .alwaysEdible()
+                        .build()
+                );
+            }
+
+            return properties;
+        };
+    }
+
+    private static Supplier<BlockBehaviour.Properties> honeycombBlockProperties(Identifier registryID) {
+        return () -> BlockBehaviour.Properties.ofFullCopy(Blocks.HONEYCOMB_BLOCK).setId(ResourceKey.create(Registries.BLOCK, registryID));
     }
 
     //endregion
@@ -206,7 +234,7 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
     private static final boolean DEFAULT_OUTPUT_TYPE_INCLUDES_BLOCK = DEFAULT_APIARY_OUTPUT_TYPES.contains(ApiaryOutputType.BLOCK);
 
     @Override
-    public void validateDefaults(String id, Optional<ItemStackTemplate> defaultComb, Optional<ItemStackTemplate> defaultCombBlock) {
+    public void validateDefaults(Identifier id, Optional<ItemStackTemplate> defaultComb, Optional<ItemStackTemplate> defaultCombBlock) {
         if (DEFAULT_OUTPUT_TYPE_INCLUDES_COMB && defaultComb.isEmpty()) {
             throw new IllegalArgumentException(id + " : Default comb must be present when list is empty and config contains combs!!!");
         } else if (DEFAULT_OUTPUT_TYPE_INCLUDES_BLOCK && defaultCombBlock.isEmpty()) {

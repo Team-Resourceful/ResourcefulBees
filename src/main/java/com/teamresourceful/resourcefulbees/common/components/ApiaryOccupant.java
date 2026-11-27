@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.common.components;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
-import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.util.EntityUtils;
@@ -30,8 +29,6 @@ import net.minecraft.world.level.storage.TagValueOutput;
 import org.jspecify.annotations.NullMarked;
 
 import javax.annotation.Nullable;
-
-import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants.MIN_HIVE_TIME;
 
 @NullMarked
 public record ApiaryOccupant(
@@ -77,19 +74,16 @@ public record ApiaryOccupant(
         try (var reporter = new ProblemReporter.ScopedCollector(entity.problemPath(), ModConstants.LOGGER)) {
             var output = TagValueOutput.createWithContext(reporter, entity.registryAccess());
             entity.save(output);
-            BeehiveBlockEntity.IGNORED_BEE_TAGS.forEach(output::discard);
+            BeehiveBlockEntity.IGNORED_BEE_TAGS.stream()
+                    .filter(tag -> !tag.equals("UUID"))
+                    .forEach(output::discard);
             CompoundTag entityTag = output.buildResult();
             boolean hasNectar = entityTag.getBooleanOr("HasNectar", false);
-            int maxTimeInHive;
-            if (holderBlock instanceof ApiaryBlockEntity apiary) {
-                maxTimeInHive = apiary.getMaxTimeInHive(compat);
-            } else {
-                maxTimeInHive = compat.resourcefulBees$getMaxTimeInHive();
-            }
+
             occupant = new ApiaryOccupant(
                     TypedEntityData.of(entity.getType(), entityTag),
                     0,
-                    hasNectar ? maxTimeInHive : MIN_HIVE_TIME,
+                    holderBlock.getMaxTimeInHive(compat, hasNectar),
                     entity.getDisplayName(),
                     EntityUtils.getBeeColorOrDefault(entity),
                     locked,
@@ -102,7 +96,9 @@ public record ApiaryOccupant(
 
     public @Nullable Entity createEntity(Level level, BlockPos hivePos) {
         CompoundTag entityTag = this.entityData.copyTagWithoutId();
-        BeehiveBlockEntity.IGNORED_BEE_TAGS.forEach(entityTag::remove);
+        BeehiveBlockEntity.IGNORED_BEE_TAGS.stream()
+                .filter(tag -> !tag.equals("UUID"))
+                .forEach(entityTag::remove);
         Entity entity = EntityType.loadEntityRecursive(this.entityData.type(), entityTag, level, EntitySpawnReason.LOAD, EntityProcessor.NOP);
         if (entity != null && entity.is(EntityTypeTags.BEEHIVE_INHABITORS)) {
             entity.setNoGravity(true);

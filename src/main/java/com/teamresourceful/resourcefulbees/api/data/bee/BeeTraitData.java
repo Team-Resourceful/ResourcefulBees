@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.api.data.trait.Aura;
 import com.teamresourceful.resourcefulbees.api.data.trait.PotionEffect;
 import com.teamresourceful.resourcefulbees.api.data.trait.TraitDamageType;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 
 import java.util.Set;
@@ -15,12 +16,12 @@ public interface BeeTraitData extends BeeData<BeeTraitData> {
 
     int sculkCharge();
 
-    Set<String> traits();
+    Set<Identifier> traits();
     Set<PotionEffect> potionDamageEffects();
     Set<String> damageImmunities();
     Set<MobEffect> potionImmunities();
     Set<TraitDamageType> damageTypes();
-    Set<String> specialAbilities();
+    Set<Identifier> specialAbilities();
     Set<ParticleType<?>> particleEffects();
     Set<Aura> auras();
 
@@ -58,11 +59,12 @@ public interface BeeTraitData extends BeeData<BeeTraitData> {
         return !hasDamageTypes() && !hasPotionDamageEffects();
     }
 
-    default boolean hasTrait(String trait) {
+    default boolean hasTrait(Identifier trait) {
         return traits().contains(trait);
     }
 
-    default boolean hasAbility(String ability) {
+    default boolean hasAbility(Identifier ability) {
         return specialAbilities().contains(ability);
     }
+
 }

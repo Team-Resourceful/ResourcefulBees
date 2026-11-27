@@ -44,7 +44,7 @@ public final class DummyBeeData {
     }
 
     private static final BeeCoreData CORE_DATA = API.core(
-            "dummy_honeycomb",
+            ModIdentifier.of("dummy_honeycomb"),
             RegistryPredicate.create(Block::builtInRegistryHolder, Blocks.DIAMOND_BLOCK, Blocks.EMERALD_BLOCK),
             RegistryPredicate.create(EntityType::builtInRegistryHolder, EntityTypes.COW, EntityTypes.SHEEP),
             4000,

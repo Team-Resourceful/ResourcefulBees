@@ -23,7 +23,7 @@
     "sizeModifier": 1.25
   },
   "resourcefulbees:trait/v1": {
-    "traits": [ "oreo" ]
+    "traits": [ "resourcefulbees:oreo" ]
   },
   "resourcefulbees:combat/v1": {
     "removeStingerOnAttack": false,

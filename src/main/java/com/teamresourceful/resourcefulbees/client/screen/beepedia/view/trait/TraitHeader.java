@@ -25,7 +25,7 @@ public final class TraitHeader {
         LinearLayout text = LinearLayout.vertical().spacing(1);
 
         text.addChild(Widgets.text(trait.getDisplayName(), TextWidget::withLeftAlignment));
-        text.addChild(Widgets.text(Component.literal(trait.name()), widget -> widget.withLeftAlignment().withColor(Color.parse("gray"))));
+        text.addChild(Widgets.text(Component.literal(trait.name().toString()), widget -> widget.withLeftAlignment().withColor(Color.parse("gray"))));
         header.addChild(text, LayoutSettings::alignVerticallyBottom);
         layout.withChild(header);
         layout.withChild(new DividerWidget());

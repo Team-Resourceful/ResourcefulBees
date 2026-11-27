@@ -58,7 +58,7 @@ public abstract class MixinBee extends Animal implements BeeCompat {
             if (pos != null) {
                 BlockEntity blockEntity = this.level().getBlockEntity(this.hivePos);
                 if ((blockEntity instanceof TieredBeehiveBlockEntity tieredHive && tieredHive.isAllowedBee())
-                        || (blockEntity instanceof BeeHolderBlockEntity apiary && apiary.isAllowedBee())) {
+                        || (blockEntity instanceof BeeHolderBlockEntity apiary && apiary.isAllowedBee(null))) {
                     callback.setReturnValue(true);
                 }
             }

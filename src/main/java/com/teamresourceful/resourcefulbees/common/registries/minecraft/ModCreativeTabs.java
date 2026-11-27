@@ -75,7 +75,11 @@ public class ModCreativeTabs {
                     output.accept(ModItems.CENTRIFUGE_CRANK.get());
                     output.accept(ModItems.CENTRIFUGE.get());
                     output.accept(ModItems.WAXED_MACHINE_BLOCK.get());
+                    output.accept(ModItems.COLONY_CONTROLLER.get());
 
+                    output.accept(ModItems.COLONY_RADIUS_UPGRADE.get());
+                    output.accept(ModItems.COLONY_ROUTE_UPGRADE.get());
+                    output.accept(ModItems.COLONY_BEE_UPGRADE.get());
                     output.accept(ModItems.ENERGY_CAP_UPGRADE.get());
                     output.accept(ModItems.ENERGY_XFER_UPGRADE.get());
                     output.accept(ModItems.ENERGY_FILL_UPGRADE.get());

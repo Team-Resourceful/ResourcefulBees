@@ -10,11 +10,10 @@ import com.teamresourceful.resourcefulbees.common.enchantments.HiveBreakHandler;
 import com.teamresourceful.resourcefulbees.common.items.locator.DimensionalBeeHolder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.FlowHiveTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
-import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
-import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
-import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultHiveTypes;
+import com.teamresourceful.resourcefulbees.common.lib.defaults.*;
 import com.teamresourceful.resourcefulbees.common.lib.tools.ModValidation;
 import com.teamresourceful.resourcefulbees.common.lib.util.ModUtils;
 import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompatHelper;
@@ -26,32 +25,30 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.*;
 import com.teamresourceful.resourcefulbees.common.setup.DataSetup;
 import com.teamresourceful.resourcefulbees.common.setup.GameSetup;
 import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
-import com.teamresourceful.resourcefulbees.common.setup.data.BeeSetup;
-import com.teamresourceful.resourcefulbees.common.setup.data.HoneySetup;
-import com.teamresourceful.resourcefulbees.common.setup.data.HoneycombSetup;
-import com.teamresourceful.resourcefulbees.common.setup.data.TraitSetup;
+import com.teamresourceful.resourcefulbees.common.setup.data.*;
 import com.teamresourceful.resourcefulbees.common.world.workers.LevelWorkEvents;
+import com.teamresourceful.resourcefulbees.gametest.ModGameTest;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLConstructModEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.tooltip.TooltipLocation;
+import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.RegisterTooltipAppendersEvent;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(ModConstants.MOD_ID)
 public class ResourcefulBees {
 
-    public ResourcefulBees(IEventBus modEventBus, ModContainer modContainer) {
+    public ResourcefulBees(IEventBus modEventBus) {
         RegistryHandler.init();
         //load default data
         DefaultHiveTypes.loadDefaults();
@@ -73,7 +70,6 @@ public class ResourcefulBees {
 
 
         RegistryHandler.registerResourcefulHives();
-        HoneycombSetup.setupHoneycombs();
         BeeSetup.setupBees();
         RegistryHandler.registerDynamicBees();
         HoneySetup.setupHoney();
@@ -89,8 +85,10 @@ public class ResourcefulBees {
         NeoForge.EVENT_BUS.addListener(LevelWorkEvents::onLevelTick);
         NeoForge.EVENT_BUS.addListener(BeekeepersResolveEffect::onPlayerTick);
         NeoForge.EVENT_BUS.addListener(BeekeepersResolveEffect::invulnerabilityEvent);
+        NeoForge.EVENT_BUS.addListener(this::registerTraitReloadListener);
 
         // Register the commonSetup method for modloading
+        modEventBus.addListener(this::onConstructMod);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::onLoadingCompleted);
         modEventBus.addListener(GameSetup::registerAttributes);
@@ -103,11 +101,22 @@ public class ResourcefulBees {
         ModBiomeModifiers.init(modEventBus);
         ModAttachments.ATTACHMENTS.register(modEventBus);
 
-
+        ModGameTest.register(modEventBus);
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (ResourcefulBees) to respond directly to events.
         // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
         NeoForge.EVENT_BUS.register(this);
+    }
+
+    private void registerTraitReloadListener(AddServerReloadListenersEvent event) {
+        event.addListener(ModIdentifier.of("traits"), new TraitReloadListener());
+    }
+
+    private void onConstructMod(FMLConstructModEvent event) {
+        event.enqueueWork(() -> {
+            HoneycombSetup.setupHoneycombs();
+            HoneycombRegistry.registerJavaHoneycombs();
+        });
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
@@ -116,16 +125,9 @@ public class ResourcefulBees {
         GameSetup.initArguments();
     }
 
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
-        BeeRegistry.getRegistry().regenerateCustomBeeData(event.getServer().registryAccess());
-    }
-
     private void onLoadingCompleted(FMLLoadCompleteEvent event) {
-        TraitAbilityRegistry.getRegistry().close();
-        TraitSetup.buildCustomTraits();
-        TraitRegistry.getRegistry().close();
+        DefaultTraitAbilityTypes.registerDefaults();
+        TraitSetup.prepareTraitResources();
         TagGenerator.generateCommonData();
         HoneycombRegistry.getRegistry().regenerateVariationData();
         MissingRegistrySetup.checkMissingRegistries();

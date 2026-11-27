@@ -14,6 +14,7 @@ import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -26,7 +27,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public record CustomHoneyFluidData(
-        String id,
+        Identifier id,
         HoneyRenderData renderData,
         HoneyFluidAttributesData fluidAttributesData,
         LazyHolder<Fluid> stillFluid,
@@ -37,14 +38,14 @@ public record CustomHoneyFluidData(
         Set<Pair<Holder<MobEffect>, Float>> beeconEffects
 ) implements HoneyFluidData {
 
-    private static final HoneyFluidData DEFAULT = new CustomHoneyFluidData("", CustomHoneyRenderData.DEFAULT, CustomHoneyFluidAttributesData.DEFAULT, LazyHolder.of(BuiltInRegistries.FLUID, Fluids.EMPTY), LazyHolder.of(BuiltInRegistries.FLUID, Fluids.EMPTY), LazyHolder.of(BuiltInRegistries.ITEM, Items.AIR), LazyHolder.of(BuiltInRegistries.BLOCK, Blocks.AIR), TradeData.DEFAULT, new HashSet<>());
+    private static final HoneyFluidData DEFAULT = new CustomHoneyFluidData(ModIdentifier.of("fake"), CustomHoneyRenderData.DEFAULT, CustomHoneyFluidAttributesData.DEFAULT, LazyHolder.of(BuiltInRegistries.FLUID, Fluids.EMPTY), LazyHolder.of(BuiltInRegistries.FLUID, Fluids.EMPTY), LazyHolder.of(BuiltInRegistries.ITEM, Items.AIR), LazyHolder.of(BuiltInRegistries.BLOCK, Blocks.AIR), TradeData.DEFAULT, new HashSet<>());
 
     private static final Codec<Pair<Holder<MobEffect>, Float>> BEECON_EFFECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             MobEffect.CODEC.fieldOf("effect").forGetter(Pair::getFirst),
             Codec.FLOAT.fieldOf("drainAmount").forGetter(Pair::getSecond)
     ).apply(instance, Pair::of));
 
-    private static Codec<HoneyFluidData> codec(String id) {
+    private static Codec<HoneyFluidData> codec(Identifier id) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 RecordCodecBuilder.point(id),
 
@@ -71,19 +72,19 @@ public record CustomHoneyFluidData(
                         attributes,
                         LazyHolder.of(
                                 BuiltInRegistries.FLUID,
-                                ModIdentifier.of(honeyId + "_honey_fluid_source")
+                                honeyId.withSuffix("_honey_fluid_source")
                         ),
                         LazyHolder.of(
                                 BuiltInRegistries.FLUID,
-                                ModIdentifier.of(honeyId + "_honey_fluid_flowing")
+                                honeyId.withSuffix("_honey_fluid_flowing")
                         ),
                         LazyHolder.of(
                                 BuiltInRegistries.ITEM,
-                                ModIdentifier.of(honeyId + "_honey_bucket")
+                                honeyId.withSuffix("_honey_bucket")
                         ),
                         LazyHolder.of(
                                 BuiltInRegistries.BLOCK,
-                                ModIdentifier.of(honeyId + "_honey_fluid_block")
+                                honeyId.withSuffix("_honey_fluid_block")
                         ),
                         tradeData,
                         effects

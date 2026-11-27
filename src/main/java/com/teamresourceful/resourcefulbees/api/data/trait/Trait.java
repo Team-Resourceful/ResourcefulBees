@@ -5,25 +5,33 @@ import com.mojang.serialization.Decoder;
 import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Util;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
-public record Trait(String name, Item displayItem,
-                    Set<PotionEffect> potionDamageEffects, Set<String> damageImmunities,
-                    Set<MobEffect> potionImmunities, Set<TraitDamageType> damageTypes, Set<String> specialAbilities,
-                    Set<ParticleType<?>> particleEffects, Set<Aura> auras
+public record Trait(
+        Identifier name,
+        Item displayItem,
+        Set<PotionEffect> potionDamageEffects,
+        Set<String> damageImmunities,
+        Set<MobEffect> potionImmunities,
+        Set<TraitDamageType> damageTypes,
+        Set<Identifier> specialAbilities,
+        Set<ParticleType<?>> particleEffects,
+        Set<Aura> auras
 ) {
-    public static final Trait DEFAULT = new Trait("this is a test string", null, Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet());
+    public static final Trait DEFAULT = new Trait(ModIdentifier.of("test_trait"), null, Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet());
 
     /**
      * Returns a {@link Codec<Trait>} that can be parsed to create a
@@ -36,7 +44,7 @@ public record Trait(String name, Item displayItem,
      * @return Returns a {@link Codec<Trait>} that can be parsed to
      * create a {@link Trait} object.
      */
-    public static Codec<Trait> getCodec(String name) {
+    public static Codec<Trait> getCodec(Identifier name) {
         return RecordCodecBuilder.create(instance -> instance.group(
             MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(Trait::name),
             BuiltInRegistries.ITEM.byNameCodec().fieldOf("displayItem").orElse(Items.NETHER_STAR).forGetter(Trait::displayItem),
@@ -44,14 +52,14 @@ public record Trait(String name, Item displayItem,
             CodecExtras.set(Codec.STRING).fieldOf("damageImmunities").orElse(new HashSet<>()).forGetter(Trait::damageImmunities),
             CodecExtras.set(BuiltInRegistries.MOB_EFFECT.byNameCodec()).fieldOf("potionImmunities").orElse(new HashSet<>()).forGetter(Trait::potionImmunities),
             CodecExtras.set(TraitDamageType.CODEC).fieldOf("damageTypes").orElse(new HashSet<>()).forGetter(Trait::damageTypes),
-            CodecExtras.set(Codec.STRING).fieldOf("specialAbilities").orElse(new HashSet<>()).forGetter(Trait::specialAbilities),
+            CodecExtras.set(Identifier.CODEC).fieldOf("specialAbilities").orElse(new HashSet<>()).forGetter(Trait::specialAbilities),
             CodecExtras.set(BuiltInRegistries.PARTICLE_TYPE.byNameCodec()).fieldOf("particleType").orElse(new HashSet<>()).forGetter(Trait::particleEffects),
             CodecExtras.set(Aura.CODEC).fieldOf("auras").orElse(new HashSet<>()).forGetter(Trait::auras)
         ).apply(instance, Trait::new));
     }
 
-    public Trait(String name, Item displayItem, Set<PotionEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<TraitDamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects, Set<Aura> auras) {
-        this.name = name.toLowerCase(Locale.ROOT).replace(" ", "_");
+    public Trait(Identifier name, Item displayItem, Set<PotionEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<TraitDamageType> damageTypes, Set<Identifier> specialAbilities, Set<ParticleType<?>> particleEffects, Set<Aura> auras) {
+        this.name = name;
         this.displayItem = displayItem == null ? Items.BLAZE_POWDER : displayItem; //covers trait data object codec
         this.potionDamageEffects = potionDamageEffects;
         this.damageImmunities = damageImmunities;
@@ -66,7 +74,7 @@ public record Trait(String name, Item displayItem,
      * @return Returns the trait name or bee name for bee-defined traits
      */
     @Override
-    public String name() {
+    public Identifier name() {
         return name;
     }
 
@@ -141,7 +149,7 @@ public record Trait(String name, Item displayItem,
      * @return Returns a {@link Set} of {@link String}s.
      */
     @Override
-    public Set<String> specialAbilities() {
+    public Set<Identifier> specialAbilities() {
         return specialAbilities;
     }
 
@@ -158,7 +166,7 @@ public record Trait(String name, Item displayItem,
     }
 
     public Component getDisplayName() {
-        return Component.translatable("trait_type.resourcefulbees." + name);
+        return Component.translatable(Util.makeDescriptionId("trait_type", name));
     }
 
     /**

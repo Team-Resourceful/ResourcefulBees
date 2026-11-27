@@ -45,7 +45,7 @@ public final class DummyHoneyData {
     );
 
     private static final HoneyBottleData BOTTLE_DATA = HONEY_API.bottle(
-            "template",
+            ModIdentifier.of("template"),
             ConstantColors.blue,
             HONEY_API.food(
                 2,
@@ -69,11 +69,11 @@ public final class DummyHoneyData {
             LazyHolder.of(BuiltInRegistries.ITEM, Items.HONEY_BLOCK),
             LazyHolder.of(BuiltInRegistries.BLOCK, Blocks.HONEY_BLOCK),
             DEFAULT_TRADE,
-            "template"
+            ModIdentifier.of("template")
     );
 
     private static final HoneyFluidData FLUID_DATA = HONEY_API.fluid(
-            "template",
+            ModIdentifier.of("template"),
             HONEY_API.fluidRender(
                     Color.DEFAULT,
                     ModIdentifier.of("block/honey/custom_honey_still"),

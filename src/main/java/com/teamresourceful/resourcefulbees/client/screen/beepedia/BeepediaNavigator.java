@@ -6,7 +6,7 @@ public interface BeepediaNavigator {
 
     void openBee(Identifier id);
 
-    void openTrait(String id);
+    void openTrait(Identifier id);
 
-    void openHoney(String id);
+    void openHoney(Identifier id);
 }

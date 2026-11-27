@@ -34,7 +34,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Avatar;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -57,14 +56,13 @@ public class ResourcefulBeesClient {
 
     private static final Identifier BEE_LOCATOR_OVERLAY = ModIdentifier.of("bee_locator");
 
-    public ResourcefulBeesClient(ModContainer container) {
+    public ResourcefulBeesClient() {
         ModClientFluidProperties.registerHoneyFluids();
         NeoForge.EVENT_BUS.addListener(MissingRegistryScreen::onScreenOpening);
     }
 
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
-        // pet database server is down so I cant test currently
         PetLoader.loadAPI();
     }
 
@@ -102,6 +100,7 @@ public class ResourcefulBeesClient {
         event.register(ModMenuTypes.ENDER_BEECON.get(), EnderBeeconScreen::new);
         event.register(ModMenuTypes.HONEY_GENERATOR.get(), HoneyGeneratorScreen::new);
         event.register(ModMenuTypes.HONEY_POT.get(), HoneyPotScreen::new);
+        event.register(ModMenuTypes.COLONY_CONTROLLER.get(), ColonyControllerScreen::new);
     }
 
     @SubscribeEvent

@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.items.honey.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModFluids;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.Fluid;
@@ -28,7 +29,7 @@ public interface HoneyRegistry {
      * @param honey Honey type for which HoneyData is requested.
      * @return Returns a HoneyBottleData object for the given bee type.
      */
-    CustomHoneyData getHoneyData(String honey);
+    CustomHoneyData getHoneyData(Identifier honey);
 
     /**
      * Returns an Optional HoneyBottleData object for the given honey type.
@@ -36,7 +37,15 @@ public interface HoneyRegistry {
      * @param honey Honey type for which HoneyData is requested.
      * @return Returns an Optional HoneyBottleData object for the given bee type.
      */
-    Optional<CustomHoneyData> getOptionalHoneyData(String honey);
+    Optional<CustomHoneyData> getOptionalHoneyData(Identifier honey);
+
+    /**
+     * Returns whether the given honey type is registered.
+     *
+     * @param name Honey type to check.
+     * @return Returns true if the given honey type is registered.
+     */
+    boolean containsHoney(Identifier name);
 
     /**
      * Returns whether the given honey type is registered.
@@ -50,9 +59,9 @@ public interface HoneyRegistry {
      * Returns an unmodifiable copy of the Honey Registry.
      * This is useful for iterating over all honey without worry of changing data
      *
-     *  @return Returns unmodifiable copy of honey registry.
+     * @return Returns unmodifiable copy of honey registry.
      */
-    Map<String, CustomHoneyData> getHoneyBottles();
+    Map<Identifier, CustomHoneyData> getHoneyBottles();
 
     /**
      * Returns a set containing all registered HoneyBottleData.
@@ -70,7 +79,7 @@ public interface HoneyRegistry {
     /**
      * @return Returns a set containing all registered honeys ids.
      */
-    Set<String> getHoneyTypes();
+    Set<Identifier> getHoneyTypes();
 
     /**
      * Gets the fluid resource associated with a honey bottle.
@@ -87,11 +96,7 @@ public interface HoneyRegistry {
             return FluidResource.EMPTY;
         }
 
-        String id = bottle.getHoneyData().id();
-
-        if (id.isEmpty()) {
-            return FluidResource.EMPTY;
-        }
+        Identifier id = bottle.getHoneyData().id();
 
         CustomHoneyData honey = getHoneyData(id);
 
@@ -115,11 +120,7 @@ public interface HoneyRegistry {
     default Item getBottleFromFluid(FluidResource fluidResource) {
         Fluid fluid = fluidResource.getFluid();
         if (fluid instanceof CustomHoneyFluid.Still honeyFluid) {
-            String id = honeyFluid.getHoneyFluidData().id();
-
-            if (id.isEmpty()) {
-                return Items.AIR;
-            }
+            Identifier id = honeyFluid.getHoneyFluidData().id();
 
             CustomHoneyData honey = getHoneyData(id);
 

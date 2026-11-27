@@ -10,14 +10,15 @@ import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.fluid.Cus
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Util;
 
 import java.util.Map;
 
-public record HoneyDataImpl(String name, Map<Identifier, HoneyData<?>> data) implements CustomHoneyData {
+public record HoneyDataImpl(Identifier name, Map<Identifier, HoneyData<?>> data) implements CustomHoneyData {
 
     @Override
     public MutableComponent displayName() {
-        return Component.translatable("honey_type.resourcefulbees." + name());
+        return Component.translatable(Util.makeDescriptionId("honey_type", name));
     }
 
     @Override

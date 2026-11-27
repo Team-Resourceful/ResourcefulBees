@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.api.data.honey.base;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,7 +16,7 @@ public interface HoneyDataSerializer<T extends HoneyData<T>> {
 
     int version();
 
-    Codec<T> codec(String id);
+    Codec<T> codec(Identifier id);
 
     default @Nullable T defaultValue() {
         return null;
@@ -32,7 +31,7 @@ public interface HoneyDataSerializer<T extends HoneyData<T>> {
         return (T) data;
     }
 
-    static <T extends HoneyData<T>> HoneyDataSerializer<T> of(Identifier id, int version, Function<String, Codec<T>> codec) {
+    static <T extends HoneyData<T>> HoneyDataSerializer<T> of(Identifier id, int version, Function<Identifier, Codec<T>> codec) {
         return new HoneyDataSerializer<>() {
             @Override
             public Identifier type() {
@@ -45,7 +44,7 @@ public interface HoneyDataSerializer<T extends HoneyData<T>> {
             }
 
             @Override
-            public Codec<T> codec(String name) {
+            public Codec<T> codec(Identifier name) {
                 return codec.apply(name);
             }
 
@@ -56,7 +55,7 @@ public interface HoneyDataSerializer<T extends HoneyData<T>> {
         };
     }
 
-    static <T extends HoneyData<T>> HoneyDataSerializer<T> of(Identifier id, int version, Function<String, Codec<T>> codec, @Nullable T defaultValue) {
+    static <T extends HoneyData<T>> HoneyDataSerializer<T> of(Identifier id, int version, Function<Identifier, Codec<T>> codec, @Nullable T defaultValue) {
         return new HoneyDataSerializer<>() {
             @Override
             public Identifier type() {
@@ -69,7 +68,7 @@ public interface HoneyDataSerializer<T extends HoneyData<T>> {
             }
 
             @Override
-            public Codec<T> codec(String name) {
+            public Codec<T> codec(Identifier name) {
                 return codec.apply(name);
             }
 

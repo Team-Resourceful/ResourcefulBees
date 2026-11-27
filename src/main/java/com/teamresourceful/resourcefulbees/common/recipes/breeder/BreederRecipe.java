@@ -29,9 +29,9 @@ public record BreederRecipe(
     public static final MapCodec<BreederRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             ParentInput.CODEC.fieldOf("parent1").forGetter(BreederRecipe::parent1),
             ParentInput.CODEC.fieldOf("parent2").forGetter(BreederRecipe::parent2),
-            Ingredient.CODEC.fieldOf("optional").orElse(Ingredient.of(ModItems.BEE_JAR.get())).forGetter(BreederRecipe::optional),
+            Ingredient.CODEC.optionalFieldOf("optional", Ingredient.of(ModItems.BEE_JAR.get())).forGetter(BreederRecipe::optional),
             CodecExtras.weightedCollection(ChildOutput.CODEC, ChildOutput::weight).fieldOf("outputs").forGetter(BreederRecipe::outputs),
-            Codec.intRange(100, 72000).fieldOf("time").orElse(BreederConstants.DEFAULT_BREEDER_TIME).forGetter(BreederRecipe::time)
+            Codec.intRange(100, 72000).optionalFieldOf("time", BreederConstants.DEFAULT_BREEDER_TIME).forGetter(BreederRecipe::time)
     ).apply(i, BreederRecipe::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, BreederRecipe> STREAM_CODEC = StreamCodec.composite(
@@ -75,9 +75,14 @@ public record BreederRecipe(
 
     @Override
     public boolean matches(Input input, @NonNull Level level) {
-        return (parent1.matches(input.input1, input.feedItem1) && parent2.matches(input.input2, input.feedItem2))
-                || (parent2.matches(input.input1, input.feedItem1) && parent1.matches(input.input2, input.feedItem2))
-                && this.optional.test(input.optionalInput);
+        boolean parentsMatch =
+                (parent1.matches(input.input1(), input.feedItem1())
+                        && parent2.matches(input.input2(), input.feedItem2()))
+                        ||
+                        (parent2.matches(input.input1(), input.feedItem1())
+                                && parent1.matches(input.input2(), input.feedItem2()));
+
+        return parentsMatch && this.optional.test(input.optionalInput());
     }
 
     @Override

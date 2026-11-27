@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.blocks;
 
 import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHolderBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHouseBlock;
 import net.minecraft.core.BlockPos;
@@ -32,6 +33,8 @@ public class ApiaryBlock extends BeeHouseBlock implements BeeHolderBlock {
 
   @Override
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
-    return level.isClientSide() ? null : createTickerHelper(type, tier.getBlockEntityType(), (level1, pos, state1, blockEntity) -> ApiaryBlockEntity.serverTick(level1, pos, state1, (ApiaryBlockEntity) blockEntity));
+    return level.isClientSide() ? null : createTickerHelper(type, tier.getBlockEntityType(),
+            (level1, pos, state1, blockEntity) ->
+                    BeeHolderBlockEntity.serverTick(level1, pos, state1, (ApiaryBlockEntity) blockEntity));
   }
 }

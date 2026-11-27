@@ -1,11 +1,11 @@
 {
   "damageTypes": [
     {
-      "damageType": "setOnFire",
+      "damageType": "set_on_fire",
       "amplifier": 1
     }
   ],
-  "specialAbilities": ["flammable"],
+  "specialAbilities": ["resourcefulbees:flammable"],
   "particleType": ["minecraft:flame"],
   "displayItem": "minecraft:blaze_rod",
   "damageImmunities": [

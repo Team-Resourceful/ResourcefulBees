@@ -53,7 +53,7 @@ public class BeeJarItem extends Item {
             if (level.isClientSide() || !isFilled(stack)) return InteractionResult.FAIL;
             return spawnOccupant(context, stack, level, player);
         }
-        return InteractionResult.FAIL;
+        return InteractionResult.PASS;
     }
 
     private static InteractionResult.Success spawnOccupant(UseOnContext context, ItemStack stack, Level level, Player player) {

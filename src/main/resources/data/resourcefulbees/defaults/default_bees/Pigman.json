@@ -22,7 +22,7 @@
         ]
     },
     "resourcefulbees:trait/v1": {
-        "traits": ["nether", "pigman"]
+        "traits": ["resourcefulbees:nether", "resourcefulbees:pigman"]
     },
     "resourcefulbees:trade/v1": {
         "amount": {

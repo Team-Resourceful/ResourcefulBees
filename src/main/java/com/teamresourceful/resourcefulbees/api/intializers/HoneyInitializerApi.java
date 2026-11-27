@@ -46,11 +46,11 @@ public class HoneyInitializerApi {
     private HoneyInitializers.HoneyFoodDataInitializer food;
     private HoneyInitializers.HoneyBottleEffectDataInitializer effect;
 
-    public CustomHoneyData data(String name, Map<Identifier, HoneyData<?>> data) {
+    public CustomHoneyData data(Identifier name, Map<Identifier, HoneyData<?>> data) {
         return this.data.create(name, data);
     }
 
-    public HoneyFluidData fluid(String id, HoneyRenderData renderData, HoneyFluidAttributesData attributes, LazyHolder<Fluid> still, LazyHolder<Fluid> flowing, LazyHolder<Item> bucket, LazyHolder<Block> block, BeekeeperTradeData tradeData, Set<Pair<Holder<MobEffect>, Float>> effects) {
+    public HoneyFluidData fluid(Identifier id, HoneyRenderData renderData, HoneyFluidAttributesData attributes, LazyHolder<Fluid> still, LazyHolder<Fluid> flowing, LazyHolder<Item> bucket, LazyHolder<Block> block, BeekeeperTradeData tradeData, Set<Pair<Holder<MobEffect>, Float>> effects) {
         return this.fluid.create(id, renderData, attributes, still, flowing, bucket, block, tradeData, effects);
     }
 
@@ -62,11 +62,11 @@ public class HoneyInitializerApi {
         return this.fluidAttributes.create(lightLevel, density, temperature, viscosity, fallDistanceModifier, motionScale, canPushEntities, canSwimIn, canDrownIn, canExtinguish, canConvertToSource, supportsBoating, canHydrate, rarity, bucketFill, bucketEmpty);
     }
 
-    public HoneyBlockData block(Color color, float jumpFactor, float speedFactor, LazyHolder<Item> blockItem, LazyHolder<Block> block, BeekeeperTradeData tradeData, String id) {
+    public HoneyBlockData block(Color color, float jumpFactor, float speedFactor, LazyHolder<Item> blockItem, LazyHolder<Block> block, BeekeeperTradeData tradeData, Identifier id) {
         return this.block.create(color, jumpFactor, speedFactor, blockItem, block, tradeData, id);
     }
 
-    public HoneyBottleData bottle(String id, Color color, HoneyFoodData food, Rarity rarity, LazyHolder<Item> bottle, BeekeeperTradeData tradeData) {
+    public HoneyBottleData bottle(Identifier id, Color color, HoneyFoodData food, Rarity rarity, LazyHolder<Item> bottle, BeekeeperTradeData tradeData) {
         return this.bottle.create(id, color, food, rarity, bottle, tradeData);
     }
 

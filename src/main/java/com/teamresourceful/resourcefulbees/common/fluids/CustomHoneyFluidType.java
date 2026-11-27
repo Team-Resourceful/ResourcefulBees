@@ -10,6 +10,7 @@ public final class CustomHoneyFluidType {
     public static FluidProperties.Builder create(HoneyFluidAttributesData attributes) {
         return FluidProperties.builder()
                 .supportsBoating(attributes.supportsBoating())
+                .isWaterLike(true)
                 .canHydrate(attributes.canHydrate())
                 .canDrown(attributes.canDrownIn())
                 .canExtinguish(attributes.canExtinguish())

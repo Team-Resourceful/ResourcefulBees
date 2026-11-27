@@ -21,6 +21,7 @@ import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassExceptio
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Util;
 import org.apache.commons.lang3.Strings;
 
 import java.io.FileWriter;
@@ -32,6 +33,14 @@ import java.util.stream.Stream;
 public final class LangGenerator {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+
+    public static final String ITEM = "item";
+    public static final String BLOCK = "block";
+    public static final String FLUID = "fluid";
+    public static final String BEE_TYPE = "bee_type";
+    public static final String HONEY_TYPE = "honey_type";
+    public static final String COMB_TYPE = "comb_type";
+    public static final String TRAIT_TYPE = "trait_type";
 
     public static final String ITEM_RESOURCEFULBEES = "item.resourcefulbees.";
     public static final String BLOCK_RESOURCEFULBEES = "block.resourcefulbees.";
@@ -65,21 +74,21 @@ public final class LangGenerator {
                 .map(Identifier::getPath)
                 .forEach(name -> jsonObject.addProperty(ENTITY_TYPE_RESOURCEFULBEES + name, replaceAndCapitalize(name)));
 
-        generateLang(BeeRegistry.get().getStreamOfBees().map(CustomBeeData::id).map(Identifier::getPath), BEE_RESOURCEFULBEES, jsonObject);
-        generateLang(HoneyRegistry.get().getStreamOfHoney().map(CustomHoneyData::name), HONEY_RESOURCEFULBEES, jsonObject);
-        generateLang(HoneycombRegistry.get().getStreamOfHoneycombs().map(OutputVariation::id), COMB_RESOURCEFULBEES, jsonObject);
-        generateLang(TraitRegistry.get().getStreamOfTraits().map(Trait::name), TRAIT_RESOURCEFULBEES, jsonObject);
+        generateLang(BeeRegistry.get().getStreamOfBees().map(CustomBeeData::id).map(Identifier::getPath), BEE_TYPE, jsonObject);
+        generateLang(HoneyRegistry.get().getStreamOfHoney().map(CustomHoneyData::name).map(Identifier::getPath), HONEY_TYPE, jsonObject);
+        generateLang(HoneycombRegistry.get().getStreamOfVariations().map(OutputVariation::id).map(Identifier::getPath), COMB_TYPE, jsonObject);
+        generateLang(TraitRegistry.get().getStreamOfTraits().map(Trait::name).map(Identifier::getPath), TRAIT_TYPE, jsonObject);
 
-        generateLang(ModItems.SPAWN_EGG_ITEMS, ITEM_RESOURCEFULBEES, jsonObject);
-        generateLang(ModItems.HONEYCOMB_ITEMS, ITEM_RESOURCEFULBEES, jsonObject);
-        generateLang(ModItems.HONEY_BOTTLE_ITEMS, ITEM_RESOURCEFULBEES, jsonObject);
-        generateLang(ModItems.HONEY_BUCKET_ITEMS, ITEM_RESOURCEFULBEES, jsonObject);
-        generateLang(ModItems.HONEY_BLOCK_ITEMS, ITEM_RESOURCEFULBEES, jsonObject);
-        generateLang(ModItems.HONEYCOMB_BLOCK_ITEMS, ITEM_RESOURCEFULBEES, jsonObject);
-        generateLang(ModBlocks.HONEYCOMB_BLOCKS, BLOCK_RESOURCEFULBEES, jsonObject);
-        generateLang(ModBlocks.HONEY_FLUID_BLOCKS, BLOCK_RESOURCEFULBEES, jsonObject);
-        generateLang(ModFluids.STILL_HONEY_FLUIDS, FLUID_RESOURCEFULBEES, jsonObject);
-        generateLang(Stream.concat(Stream.of("honey"), HoneyRegistry.get().getHoneyTypes().stream()), FLUID_TYPE_RESOURCEFULBEES, jsonObject);
+        generateLang(ModItems.SPAWN_EGG_ITEMS, ITEM, jsonObject);
+        generateLang(ModItems.HONEYCOMB_ITEMS, ITEM, jsonObject);
+        generateLang(ModItems.HONEY_BOTTLE_ITEMS, ITEM, jsonObject);
+        generateLang(ModItems.HONEY_BUCKET_ITEMS, ITEM, jsonObject);
+        generateLang(ModItems.HONEY_BLOCK_ITEMS, ITEM, jsonObject);
+        generateLang(ModItems.HONEYCOMB_BLOCK_ITEMS, ITEM, jsonObject);
+        generateLang(ModBlocks.HONEYCOMB_BLOCKS, BLOCK, jsonObject);
+        generateLang(ModBlocks.HONEY_FLUID_BLOCKS, BLOCK, jsonObject);
+        generateLang(ModFluids.STILL_HONEY_FLUIDS, FLUID, jsonObject);
+        generateLang((ResourcefulRegistry<?>) Stream.concat(Stream.of("honey"), HoneyRegistry.get().getHoneyTypes().stream()), FLUID_TYPE_RESOURCEFULBEES, jsonObject);
 
         return writeLangFile(jsonObject);
     }
@@ -103,8 +112,7 @@ public final class LangGenerator {
     }
 
     private static void generateLang(ResourcefulRegistry<?> register, String prefix, JsonObject object) {
-        register.getEntries()
-                .forEach(registryObject -> object.addProperty(prefix + registryObject.getId().getPath(), replaceAndCapitalize(registryObject.getId().getPath())));
+        register.getEntries().forEach(registryObject -> object.addProperty(Util.makeDescriptionId(prefix, registryObject.getId()), replaceAndCapitalize(registryObject.getId().getPath())));
     }
 
     private static void generateLang(Stream<String> register, String prefix, JsonObject object) {

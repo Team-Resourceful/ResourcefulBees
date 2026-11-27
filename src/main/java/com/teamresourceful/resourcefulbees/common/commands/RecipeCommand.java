@@ -18,6 +18,7 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipe
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
@@ -81,7 +82,7 @@ public class RecipeCommand {
         HoneyRegistry.getRegistry()
                 .getStreamOfHoney()
                 .forEach(honey -> {
-                    String name = honey.name();
+                    Identifier name = honey.name();
 
                     HoneyBottleData bottleData = honey.getBottleData();
                     HoneyFluidData fluidData = honey.getFluidData();

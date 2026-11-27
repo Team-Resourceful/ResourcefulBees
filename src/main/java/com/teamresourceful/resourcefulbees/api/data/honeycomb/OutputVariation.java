@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.api.registry.HoneycombRegistry;
 import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 
@@ -14,28 +15,31 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public record OutputVariation(String id,
-                              Map<BeehiveTier, ItemStackTemplate> hiveCombs,
-                              Map<ApiaryTier, ItemStackTemplate> apiaryCombs,
-                              Optional<ItemStackTemplate> defaultComb,
-                              Optional<ItemStackTemplate> defaultCombBlock
+public record OutputVariation(
+        Identifier id,
+        Map<BeehiveTier, ItemStackTemplate> hiveCombs,
+        Map<ApiaryTier, ItemStackTemplate> apiaryCombs,
+        Optional<ItemStackTemplate> defaultComb,
+        Optional<ItemStackTemplate> defaultCombBlock
 ) {
 
     public static final Codec<OutputVariation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.STRING.fieldOf("identifier").forGetter(OutputVariation::id),
+            Identifier.CODEC.fieldOf("identifier").forGetter(OutputVariation::id),
             Codec.unboundedMap(BeehiveTier.CODEC, ItemStackTemplate.CODEC).fieldOf("hiveCombs").orElseGet(HashMap::new).forGetter(OutputVariation::hiveCombs),
             Codec.unboundedMap(ApiaryTier.CODEC, ItemStackTemplate.CODEC).fieldOf("apiaryCombs").orElseGet(HashMap::new).forGetter(OutputVariation::apiaryCombs),
             ItemStackTemplate.CODEC.optionalFieldOf("defaultComb").forGetter(OutputVariation::defaultComb),
             ItemStackTemplate.CODEC.optionalFieldOf("defaultCombBlock").forGetter(OutputVariation::defaultCombBlock)
     ).apply(instance, OutputVariation::of));
 
-    private static OutputVariation of(String identifier, Map<BeehiveTier, ItemStackTemplate> hiveCombs, Map<ApiaryTier, ItemStackTemplate> apiaryCombs, Optional<ItemStackTemplate> defaultComb, Optional<ItemStackTemplate> defaultCombBlock) {
-        defaultComb.ifPresent(comb -> comb.withCount(1));
-        defaultCombBlock.ifPresent(block -> block.withCount(1));
-        hiveCombs = fixHiveCombs(hiveCombs, defaultComb);
-        apiaryCombs = fixApiaryCombs(identifier, apiaryCombs, defaultComb, defaultCombBlock);
+
+    public static OutputVariation of(Identifier identifier, Map<BeehiveTier, ItemStackTemplate> hiveCombs, Map<ApiaryTier, ItemStackTemplate> apiaryCombs, Optional<ItemStackTemplate> defaultComb, Optional<ItemStackTemplate> defaultCombBlock) {
+        defaultComb = defaultComb.map(comb -> comb.withCount(1));
+        defaultCombBlock = defaultCombBlock.map(block -> block.withCount(1));
+        hiveCombs = fixHiveCombs(new HashMap<>(hiveCombs), defaultComb);
+        apiaryCombs = fixApiaryCombs(identifier, new HashMap<>(apiaryCombs), defaultComb, defaultCombBlock);
         return new OutputVariation(identifier, hiveCombs, apiaryCombs, defaultComb, defaultCombBlock);
     }
+
 
     public ItemStack getHiveOutput(BeehiveTier tier) {
         return hiveCombs().get(tier).create();
@@ -66,7 +70,7 @@ public record OutputVariation(String id,
      * When the {@link #apiaryCombs} list is empty then a new list will be created based on the values specified in the config.
      * <b>BOTH</b> a {@link #defaultComb} and a {@link #defaultCombBlock} <b>MUST</b> be supplied for the list when they are specified in the config!
      * */
-    private static Map<ApiaryTier, ItemStackTemplate> fixApiaryCombs(String id, Map<ApiaryTier, ItemStackTemplate> apiaryCombs, Optional<ItemStackTemplate> defaultComb, Optional<ItemStackTemplate> defaultCombBlock) {
+    private static Map<ApiaryTier, ItemStackTemplate> fixApiaryCombs(Identifier id, Map<ApiaryTier, ItemStackTemplate> apiaryCombs, Optional<ItemStackTemplate> defaultComb, Optional<ItemStackTemplate> defaultCombBlock) {
         ItemStackTemplate lastStack = null;
         boolean wasEmpty = apiaryCombs.isEmpty();
         if (wasEmpty) HoneycombRegistry.get().validateDefaults(id, defaultComb, defaultCombBlock);
@@ -77,11 +81,13 @@ public record OutputVariation(String id,
                 continue;
             }
             if (lastStack == null || wasEmpty) {
-                //We check if it was empty to make sure it with create the proper list based off the config value instead
+                //We check if it was empty to make sure it will create the proper list based off the config value instead
                 //of copying the first config value to all slots.
-                //noinspection OptionalGetWithoutIsPresent
-                lastStack = tier.outputType().get().isComb() ? defaultComb.get() : defaultCombBlock.get();
-                lastStack.withCount(tier.outputAmount().getAsInt());
+                var template = tier.outputType().get().isComb()
+                        ? defaultComb.orElseThrow(() -> new IllegalArgumentException("Missing default honeycomb for variation: " + id))
+                        : defaultCombBlock.orElseThrow(() -> new IllegalArgumentException("Missing default honeycomb block for variation: " + id));
+
+                lastStack = template.withCount(tier.outputAmount().getAsInt());
             }
             apiaryCombs.put(tier, lastStack);
         }

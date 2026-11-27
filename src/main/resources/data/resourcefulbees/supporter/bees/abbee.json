@@ -23,7 +23,7 @@
         "sizeModifier": 0.75
     },
     "resourcefulbees:trait/v1": {
-        "traits": [ "clingy" ]
+        "traits": [ "resourcefulbees:clingy" ]
     },
     "resourcefulbees:combat/v1": {
         "removeStingerOnAttack": false,

@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.base.HoneyData;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
@@ -21,5 +22,5 @@ public interface HoneyBlockData extends HoneyData<HoneyBlockData> {
 
     BeekeeperTradeData tradeData();
 
-    String id();
+    Identifier id();
 }

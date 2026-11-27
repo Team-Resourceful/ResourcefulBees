@@ -3,11 +3,14 @@ package com.teamresourceful.resourcefulbees.common.setup.data;
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
 import com.teamresourceful.resourcefulbees.common.registries.custom.HoneyRegistry;
+import com.teamresourceful.resourcefulbees.common.setup.ModDataDiscovery;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.lib.Constants;
 import com.teamresourceful.resourcefullib.common.utils.FileUtils;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 
 import java.io.Reader;
@@ -37,10 +40,23 @@ public final class HoneySetup {
 
         ModConstants.LOGGER.info("Loading Custom Honeys...");
         FileUtils.streamFilesAndParse(ModPaths.HONEY, HoneySetup::parseHoney, FileUtils::isJson);
+
+        ModConstants.LOGGER.info("Loading External Mod Honeys...");
+        ModDataDiscovery.discover("honey", HoneySetup::parseHoney);
     }
 
     private static void parseHoney(Reader reader, String name) {
-        JsonObject jsonObject = GsonHelper.fromJson(Constants.GSON, reader, JsonObject.class);
-        HoneyRegistry.getRegistry().cacheRawHoneyData(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), jsonObject);
+        Identifier id = ModIdentifier.of(name.toLowerCase(Locale.ROOT).replace(" ", "_"));
+        parseHoney(id, reader);
+    }
+
+    private static void parseHoney(Identifier id, Reader reader) {
+        try {
+            JsonObject json = GsonHelper.fromJson(Constants.GSON, reader, JsonObject.class);
+            HoneyRegistry.getRegistry().cacheRawHoneyData(id, json);
+        } catch (Exception e) {
+            ModConstants.LOGGER.error("Error parsing honey: {}", id, e);
+            throw e;
+        }
     }
 }

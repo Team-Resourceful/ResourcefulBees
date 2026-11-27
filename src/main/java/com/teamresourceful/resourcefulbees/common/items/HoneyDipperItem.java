@@ -2,8 +2,12 @@ package com.teamresourceful.resourcefulbees.common.items;
 
 import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
 import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentities.ColonyControllerBlockEntity;
 import com.teamresourceful.resourcefulbees.common.components.DipperEntity;
 import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
+import com.teamresourceful.resourcefulbees.common.items.logistics.HoneyDipperCourierRecruitmentHandler;
+import com.teamresourceful.resourcefulbees.common.items.logistics.HoneyDipperLogisticsHandler;
+import com.teamresourceful.resourcefulbees.common.items.logistics.HoneyDipperRouteEditHandler;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.HoneyDipperTranslations;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
@@ -12,6 +16,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.VisibleForDebug;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -38,17 +43,67 @@ public class HoneyDipperItem extends Item {
         super(properties);
     }
 
+
     @Override
     public @NotNull InteractionResult useOn(@NotNull UseOnContext context) {
         Level level = context.getLevel();
         Player player = context.getPlayer();
         ItemStack stack = context.getItemInHand();
+
+        BlockPos clickedPos = context.getClickedPos();
+        BlockEntity clickedTile = level.getBlockEntity(clickedPos);
+
+        if (stack.has(ModDataComponents.DIPPER_ROUTE_EDIT.get())) {
+            return HoneyDipperRouteEditHandler.handleEndpoint(context);
+        }
+
+        // Controller selection always takes precedence.
+        if (clickedTile instanceof ColonyControllerBlockEntity controller) {
+
+            DipperEntity selectedBee = stack.get(ModDataComponents.DIPPER_ENTITY);
+
+            boolean hasBeeSelection = selectedBee != null
+                    && !selectedBee.equals(DipperEntity.EMPTY);
+
+            if (hasBeeSelection) {
+                if (!(level instanceof ServerLevel serverLevel)) {
+                    return InteractionResult.SUCCESS;
+                }
+
+                Entity entity = getEntity(serverLevel, stack);
+
+                if (!(entity instanceof ResourcefulBee bee)) {
+                    if (player != null) {
+                        player.sendSystemMessage(Component.literal(
+                                "Selected courier is unavailable or invalid."
+                        ));
+                    }
+                    return InteractionResult.FAIL;
+                }
+
+                return HoneyDipperCourierRecruitmentHandler
+                        .recruitOrTransfer(context, controller, bee);
+            }
+
+            // No selected bee: retain the existing logistics workflow.
+            return HoneyDipperLogisticsHandler.selectController(
+                    context, controller);
+        }
+
+
+        // Controller selected: reserve block interactions for logistics.
+        if (HoneyDipperLogisticsHandler.hasSelection(stack)) {
+            return HoneyDipperLogisticsHandler.handleEndpoint(context);
+        }
+
         if (level instanceof ServerLevel serverLevel && player != null) {
-            BlockState clickedBlock = level.getBlockState(context.getClickedPos());
+            BlockState clickedBlock = level.getBlockState(clickedPos);
 
-            Entity dipperEntity = getEntity(serverLevel, context.getItemInHand());
+            Entity dipperEntity = getEntity(serverLevel, stack);
 
-            if (!(dipperEntity instanceof Bee bee)) return InteractionResult.FAIL;
+            if (!(dipperEntity instanceof Bee bee)) {
+                return InteractionResult.FAIL;
+            }
 
             if (bee instanceof CustomBee customBee) {
                 if (customBee.getCoreData().isBlockFlower(clickedBlock)) {
@@ -60,23 +115,17 @@ public class HoneyDipperItem extends Item {
                 return InteractionResult.SUCCESS;
             }
 
-            BlockEntity clickedTile = level.getBlockEntity(context.getClickedPos());
             if (clickedTile instanceof BeehiveBlockEntity || clickedTile instanceof ApiaryBlockEntity) {
-                bee.setHivePos(context.getClickedPos());
-                sendMessageToPlayer(bee, player, MessageTypes.HIVE, context.getClickedPos());
+                bee.setHivePos(clickedPos);
+                sendMessageToPlayer(bee, player, MessageTypes.HIVE, clickedPos);
                 player.setItemInHand(context.getHand(), setEntity(stack, null));
                 return InteractionResult.SUCCESS;
             }
-
-            /*if (clickedTile instanceof FakeFlowerBlockEntity && bee instanceof ResourcefulBee resourcefulBee) {
-                resourcefulBee.fakeFlower.set(context.getClickedPos());
-                sendMessageToPlayer(bee, player, MessageTypes.FAKE_FLOWER, context.getClickedPos());
-                player.setItemInHand(context.getHand(), setEntity(stack, null));
-                return InteractionResult.SUCCESS;
-            }*/
         }
+
         return super.useOn(context);
     }
+
 
     private void setFlowerPosition(Bee bee, UseOnContext context) {
         if (((BeeEntityAccessor)bee).getPollinateGoal().isPollinating()) {
@@ -103,13 +152,22 @@ public class HoneyDipperItem extends Item {
         return player.getMainHandItem().getItem() instanceof HoneyDipperItem || player.getOffhandItem().getItem() instanceof HoneyDipperItem;
     }
 
+
     @Override
     public @NotNull InteractionResult interactLivingEntity(@NotNull ItemStack stack, @NotNull Player player, @NotNull LivingEntity entity, @NotNull InteractionHand hand) {
         if (player.level() instanceof ServerLevel serverLevel) {
+            // Selecting a bee switches out of controller mode.
+            if (entity instanceof Bee bee && HoneyDipperLogisticsHandler.hasSelection(stack)) {
+                HoneyDipperLogisticsHandler.clearSelection(stack);
+                player.setItemInHand(hand, setEntity(stack, bee));
+                sendMessageToPlayer(bee, player, MessageTypes.BEE_SELECTED, null);
+                return InteractionResult.SUCCESS;
+            }
+
             Entity dipperEntity = getEntity(serverLevel, stack);
 
             if (entity instanceof Bee bee && dipperEntity == null) {
-                player.setItemInHand(hand, setEntity(stack, entity));
+                player.setItemInHand(hand, setEntity(stack, bee));
                 sendMessageToPlayer(bee, player, MessageTypes.BEE_SELECTED, null);
                 return InteractionResult.SUCCESS;
             }
@@ -122,20 +180,35 @@ public class HoneyDipperItem extends Item {
                 return InteractionResult.SUCCESS;
             }
         }
+
         return super.interactLivingEntity(stack, player, entity, hand);
     }
 
+
+
     @Override
     public @NotNull InteractionResult use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
-        if (level instanceof ServerLevel serverLevel) {
-            ItemStack itemInHand = player.getItemInHand(hand);
-            if (player.isShiftKeyDown() && getEntity(serverLevel, itemInHand) != null) {
-                player.setItemInHand(hand, setEntity(itemInHand, null));
-                sendMessageToPlayer(null, player, MessageTypes.BEE_CLEARED, null);
+        ItemStack stack = player.getItemInHand(hand);
+
+        if (player.isShiftKeyDown()) {
+            if (level instanceof ServerLevel) {
+                boolean hadBee = stack.has(ModDataComponents.DIPPER_ENTITY.get());
+                boolean hadController = HoneyDipperLogisticsHandler.hasSelection(stack);
+
+                if (hadBee || hadController) {
+                    stack.remove(ModDataComponents.DIPPER_ENTITY.get());
+                    stack.remove(ModDataComponents.DIPPER_ROUTE_EDIT.get());
+                    HoneyDipperLogisticsHandler.clearSelection(stack);
+                    sendMessageToPlayer(null, player, MessageTypes.BEE_CLEARED, null);
+                }
             }
+
+            return InteractionResult.SUCCESS;
         }
+
         return super.use(level, player, hand);
     }
+
 
     private static @Nullable Entity getEntity(ServerLevel level, ItemStack stack) {
         if (stack.isEmpty()) {
@@ -151,10 +224,25 @@ public class HoneyDipperItem extends Item {
         return level.getEntity(dipperEntity.uuid());
     }
 
+
     private static ItemStack setEntity(ItemStack stack, @Nullable Entity entity) {
-        stack.set(ModDataComponents.DIPPER_ENTITY, DipperEntity.of(entity == null ? null : entity.getUUID()));
+        if (entity == null) {
+            stack.remove(ModDataComponents.DIPPER_ENTITY.get());
+        } else {
+            stack.set(ModDataComponents.DIPPER_ENTITY, DipperEntity.of(entity.getUUID()));
+        }
+
         return stack;
     }
+
+
+    @VisibleForDebug
+    public static boolean hasBeeSelection(ItemStack stack) {
+        DipperEntity selected = stack.get(ModDataComponents.DIPPER_ENTITY);
+        return selected != null && !selected.equals(DipperEntity.EMPTY);
+    }
+
+
 
     private enum MessageTypes {
         FLOWER(args -> Component.translatable(HoneyDipperTranslations.FLOWER_SET, args)),

@@ -25,7 +25,7 @@
         ]
     },
     "resourcefulbees:trait/v1": {
-        "traits": ["can_swim"]
+        "traits": ["resourcefulbees:can_swim"]
     },
     "resourcefulbees:trade/v1": {
         "amount": {

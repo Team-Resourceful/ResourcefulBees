@@ -3,6 +3,8 @@ package com.teamresourceful.resourcefulbees.common.blockentities;
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.FlowHiveBlock;
+import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
+import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.recipes.FlowHiveRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;
@@ -60,8 +62,8 @@ public class FlowHiveBlockEntity extends BeeHolderBlockEntity {
     }
 
     @Override
-    protected int getMaxTimeInHive(@NotNull BeeCompat bee) {
-        return (int) (bee.resourcefulBees$getMaxTimeInHive() * 0.5);
+    public int getMaxTimeInHive(@NotNull BeeCompat bee, boolean hasNectar) {
+        return (int) ((hasNectar ? BeeConstants.MIN_HIVE_TIME : bee.resourcefulBees$getMaxTimeInHive()) * 0.5);
     }
 
     @Override
@@ -70,8 +72,8 @@ public class FlowHiveBlockEntity extends BeeHolderBlockEntity {
     }
 
     @Override
-    public boolean isAllowedBee() {
-        return getBlockState().getBlock() instanceof FlowHiveBlock;
+    public boolean isAllowedBee(@Nullable ResourcefulBee bee) {
+        return getBlockState().getBlock() instanceof FlowHiveBlock && bee != null;
     }
 
     //region NBT HANDLING

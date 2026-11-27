@@ -38,18 +38,22 @@ public class IOResourceHandler extends ItemStacksResourceHandler {
     }
 
     @Override
-    public int insert(int index, @NonNull ItemResource resource, int amount, @NonNull TransactionContext transaction) {
-        return index <= outputIndex ? super.insert(index, resource, amount, transaction) : 0;
+    public int insert(int index, @NonNull ItemResource resource, int amount, @NonNull TransactionContext context) {
+        return index < outputIndex ? super.insert(index, resource, amount, context) : 0;
     }
 
-    public void insertOutput(ItemResource resource, int amount, TransactionContext transactionContext) {
+    public int insertOutput(ItemResource resource, int amount, TransactionContext context) {
         TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
 
         int inserted = 0;
-        int size = size();
-        for (int index = outputIndex; index < size; index++) {
-            inserted += super.insert(index, resource, amount - inserted, transactionContext);
-            if (inserted == amount) break;
+        for (int index = outputIndex; index < size(); index++) {
+            inserted += super.insert(index, resource, amount - inserted, context);
+            if (inserted == amount) {
+                break;
+            }
         }
+
+        return inserted;
     }
+
 }

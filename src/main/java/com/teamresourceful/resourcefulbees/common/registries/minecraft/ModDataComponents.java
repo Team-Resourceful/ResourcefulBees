@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.components.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.logistics.CourierRouteEndpointEdit;
 import com.teamresourceful.resourcefulbees.common.registries.RegistryHelper;
 import com.teamresourceful.resourcefullib.common.bytecodecs.ExtraByteCodecs;
 import com.teamresourceful.resourcefullib.common.item.ResourcefulComponentType;
@@ -134,4 +135,18 @@ public final class ModDataComponents {
             .networkSynchronized(PollenRecipe.STREAM_CODEC)
             .cacheEncoding()
             .build());
+
+    public static final RegistryEntry<DataComponentType<DipperLogistics>> DIPPER_LOGISTICS = COMPONENTS.register("dipper_logistics", () -> DataComponentType.<DipperLogistics>builder()
+            .persistent(DipperLogistics.CODEC)
+            .networkSynchronized(DipperLogistics.STREAM_CODEC)
+            .cacheEncoding()
+            .build()
+    );
+
+    public static final RegistryEntry<DataComponentType<CourierRouteEndpointEdit>> DIPPER_ROUTE_EDIT = COMPONENTS.register("dipper_route_edit", () -> DataComponentType.<CourierRouteEndpointEdit>builder()
+            .persistent(CourierRouteEndpointEdit.CODEC)
+            .networkSynchronized(CourierRouteEndpointEdit.STREAM_CODEC)
+            .cacheEncoding()
+            .build()
+    );
 }

@@ -11,6 +11,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -24,8 +25,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
 import java.util.stream.Stream;
-
-import static net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING;
 
 public abstract class BeeHouseBlock extends RenderingBaseEntityBlock implements MenuBlock{
 
@@ -49,12 +48,12 @@ public abstract class BeeHouseBlock extends RenderingBaseEntityBlock implements 
 
     protected BeeHouseBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(HORIZONTAL_FACING, Direction.NORTH));
+        this.registerDefaultState(this.stateDefinition.any().setValue(BeehiveBlock.FACING, Direction.NORTH));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(HORIZONTAL_FACING);
+        builder.add(BeehiveBlock.FACING);
     }
 
     @Override
@@ -71,9 +70,9 @@ public abstract class BeeHouseBlock extends RenderingBaseEntityBlock implements 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         if (context.getPlayer() != null && context.getPlayer().isShiftKeyDown()) {
-            return this.defaultBlockState().setValue(HORIZONTAL_FACING, context.getHorizontalDirection());
+            return this.defaultBlockState().setValue(BeehiveBlock.FACING, context.getHorizontalDirection());
         }
-        return this.defaultBlockState().setValue(HORIZONTAL_FACING, context.getHorizontalDirection().getOpposite());
+        return this.defaultBlockState().setValue(BeehiveBlock.FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Override
@@ -84,7 +83,7 @@ public abstract class BeeHouseBlock extends RenderingBaseEntityBlock implements 
     @NotNull
     @Override
     public VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter getter, @NotNull BlockPos pos, @NotNull CollisionContext context) {
-        return state.hasProperty(HORIZONTAL_FACING) && state.getValue(HORIZONTAL_FACING).getAxis().equals(Direction.Axis.Z) ? FULL_Z_SHAPE : FULL_X_SHAPE;
+        return state.hasProperty(BeehiveBlock.FACING) && state.getValue(BeehiveBlock.FACING).getAxis().equals(Direction.Axis.Z) ? FULL_Z_SHAPE : FULL_X_SHAPE;
     }
 
     @Override

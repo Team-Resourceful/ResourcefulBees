@@ -25,7 +25,7 @@
     "feedAmount": 4
   },
   "resourcefulbees:trait/v1" : {
-    "traits": ["nether"]
+    "traits": ["resourcefulbees:nether"]
   },
   "resourcefulbees:trade/v1": {
     "amount": {
