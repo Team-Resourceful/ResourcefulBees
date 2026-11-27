@@ -13,6 +13,7 @@ import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 
 import java.util.Collections;
@@ -20,12 +21,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 public record TraitData(
-        int auraRange, int sculkCharge, Set<String> traits, boolean hasTraits,
+        int auraRange, int sculkCharge, Set<Identifier> traits, boolean hasTraits,
         Set<PotionEffect> potionDamageEffects,
         Set<String> damageImmunities,
         Set<MobEffect> potionImmunities,
         Set<TraitDamageType> damageTypes,
-        Set<String> specialAbilities,
+        Set<Identifier> specialAbilities,
         Set<ParticleType<?>> particleEffects,
         Set<Aura> auras
 ) implements BeeTraitData {
@@ -34,20 +35,20 @@ public record TraitData(
     private static final Codec<BeeTraitData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.intRange(3, 20).optionalFieldOf("auraRange", BeeConfig.defaultAuraRange).forGetter(BeeTraitData::auraRange),
             Codec.intRange(10, 1000).optionalFieldOf("sculkCharge", BeeConfig.defaultSculkCharge).forGetter(BeeTraitData::sculkCharge),
-            CodecExtras.set(Codec.STRING).optionalFieldOf("traits", new HashSet<>()).forGetter(BeeTraitData::traits)
+            CodecExtras.set(Identifier.CODEC).optionalFieldOf("traits", new HashSet<>()).forGetter(BeeTraitData::traits)
     ).apply(instance, TraitData::of));
     public static final BeeDataSerializer<BeeTraitData> SERIALIZER = BeeDataSerializer.of(ModIdentifier.of("trait"), 1, _ -> CODEC, DEFAULT);
 
-    public static TraitData of(int range, int sculkCharge, Set<String> traits) {
+    public static TraitData of(int range, int sculkCharge, Set<Identifier> traits) {
         Set<PotionEffect> potionDamageEffects = new HashSet<>();
         Set<String> damageImmunities = new HashSet<>();
         Set<MobEffect> potionImmunities = new HashSet<>();
         Set<TraitDamageType> damageTypes = new HashSet<>();
-        Set<String> specialAbilities = new HashSet<>();
+        Set<Identifier> specialAbilities = new HashSet<>();
         Set<ParticleType<?>> particleEffects = new HashSet<>();
         Set<Aura> auras = new HashSet<>();
 
-        for (String id : traits) {
+        for (Identifier id : traits) {
             Trait trait = TraitRegistry.get().getTrait(id);
             potionDamageEffects.addAll(trait.potionDamageEffects());
             damageImmunities.addAll(trait.damageImmunities());

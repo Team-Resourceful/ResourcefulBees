@@ -1,0 +1,29 @@
+{
+    "type": "resourcefulbees:breeder",
+    "parent1": {
+        "parent": "minecraft:stick",
+        "feedItems": "minecraft:honey_bottle",
+        "feedAmount": 2,
+        "returnItem": {
+            "id": "minecraft:glass_bottle",
+            "count": 1
+        }
+    },
+    "parent2": {
+        "parent": "minecraft:blaze_rod",
+        "feedItems": "minecraft:carrot",
+        "feedAmount": 3
+    },
+    "optional": "minecraft:diamond",
+    "outputs": [
+        {
+            "child": {
+                "id": "minecraft:honeycomb",
+                "count": 1
+            },
+            "weight": 1.0,
+            "chance": 1.0
+        }
+    ],
+    "time": 100
+}

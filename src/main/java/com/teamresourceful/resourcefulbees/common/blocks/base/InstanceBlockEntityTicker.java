@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.blocks.base;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -11,7 +12,7 @@ public interface InstanceBlockEntityTicker {
 
     Side getSide();
 
-    default void serverTick(Level level, BlockPos pos, BlockState state) {
+    default void serverTick(ServerLevel level, BlockPos pos, BlockState state) {
         if (getSide() == Side.SERVER || getSide() == Side.BOTH) {
             throw new IllegalArgumentException("Ticking block entity serverTick method override expected.");
         }
@@ -25,8 +26,8 @@ public interface InstanceBlockEntityTicker {
 
     static <T extends BlockEntity & InstanceBlockEntityTicker> BlockEntityTicker<@NonNull T> createTicker() {
         return (level, pos, state, entity) -> {
-            if (!level.isClientSide() && entity.getSide() != Side.CLIENT) {
-                entity.serverTick(level, pos, state);
+            if (level instanceof ServerLevel serverLevel && entity.getSide() != Side.CLIENT) {
+                entity.serverTick(serverLevel, pos, state);
             }
             if (level.isClientSide() && entity.getSide() != Side.SERVER) {
                 entity.clientTick(level, pos, state);

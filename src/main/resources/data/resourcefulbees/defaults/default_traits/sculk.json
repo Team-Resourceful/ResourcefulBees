@@ -1,4 +1,4 @@
 {
-  "specialAbilities": ["sculk"],
+  "specialAbilities": ["resourcefulbees:sculk"],
   "displayItem": "minecraft:sculk_catalyst"
 }

@@ -8,9 +8,9 @@ sealed interface BeepediaSelection {
     record Bee(Identifier id) implements BeepediaSelection {
     }
 
-    record Trait(String id) implements BeepediaSelection {
+    record Trait(Identifier id) implements BeepediaSelection {
     }
 
-    record Honey(String id) implements BeepediaSelection {
+    record Honey(Identifier id) implements BeepediaSelection {
     }
 }

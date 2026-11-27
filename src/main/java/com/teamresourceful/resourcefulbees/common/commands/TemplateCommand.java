@@ -12,6 +12,7 @@ import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
 import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ModTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.templates.DummyBeeData;
 import com.teamresourceful.resourcefulbees.common.lib.templates.DummyHoneyData;
@@ -32,6 +33,7 @@ import java.util.Optional;
 public final class TemplateCommand {
 
     private static final Gson PRETTY_GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Identifier TEMPLATE_IDENTIFIER = ModIdentifier.of("template");
     private static final String TEMPLATE_STRING = "template";
 
     private TemplateCommand() throws UtilityClassException {
@@ -116,7 +118,7 @@ public final class TemplateCommand {
     }
 
     private static int printHoneyTemplate(CommandContext<CommandSourceStack> context) {
-        DataResult<JsonElement> honeyResult = new DispatchMapCodec<>(Identifier.CODEC, HoneyDataRegistry.codec(TEMPLATE_STRING)).encodeStart(registryOps(context), DummyHoneyData.DATA);
+    DataResult<JsonElement> honeyResult = new DispatchMapCodec<>(Identifier.CODEC, HoneyDataRegistry.codec(TEMPLATE_IDENTIFIER)).encodeStart(registryOps(context), DummyHoneyData.DATA);
 
         Optional<JsonElement> result = honeyResult.resultOrPartial(
                 error -> ModConstants.LOGGER.error(
@@ -136,7 +138,7 @@ public final class TemplateCommand {
     }
 
     private static int printTraitTemplate(CommandContext<CommandSourceStack> context) {
-        DataResult<JsonElement> traitResult = Trait.getCodec(TEMPLATE_STRING).encodeStart(registryOps(context), DummyTraitData.DUMMY_TRAIT_DATA);
+        DataResult<JsonElement> traitResult = Trait.getCodec(TEMPLATE_IDENTIFIER).encodeStart(registryOps(context), DummyTraitData.DUMMY_TRAIT_DATA);
 
         Optional<JsonElement> result = traitResult.resultOrPartial(
                 error -> ModConstants.LOGGER.error(

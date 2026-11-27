@@ -38,7 +38,7 @@ public final class HoneyDataRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    public static Function<Identifier, Codec<HoneyData<?>>> codec(String id) {
+    public static Function<Identifier, Codec<HoneyData<?>>> codec(Identifier id) {
         return type -> (Codec<HoneyData<?>>) decode(type)
                 .map(serializer -> serializer.codec(id))
                 .result().orElse(null);

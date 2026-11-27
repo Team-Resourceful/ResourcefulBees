@@ -11,6 +11,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -21,7 +22,7 @@ import java.util.List;
 
 @NullMarked
 public record CoreData(
-        String honeycomb,
+        Identifier honeycomb,
         RegistryPredicate<Block> blockFlowers,
         RegistryPredicate<EntityType<?>> entityFlowers,
         int maxTimeInHive,
@@ -29,9 +30,9 @@ public record CoreData(
 ) implements BeeCoreData {
 
     private static final RegistryPredicate<Block> DEFAULT_FLOWERS = RegistryPredicate.create(Block::builtInRegistryHolder, Blocks.POPPY);
-    private static final BeeCoreData DEFAULT = new CoreData("", RegistryPredicate.empty(), RegistryPredicate.empty(), BeeConstants.MAX_TIME_IN_HIVE, new ArrayList<>());
+    private static final BeeCoreData DEFAULT = new CoreData(ModIdentifier.of("fake"), RegistryPredicate.empty(), RegistryPredicate.empty(), BeeConstants.MAX_TIME_IN_HIVE, new ArrayList<>());
     private static final Codec<BeeCoreData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.STRING.optionalFieldOf("honeycombVariation", "").forGetter(BeeCoreData::honeycomb),
+            Identifier.CODEC.optionalFieldOf("honeycombVariation", ModIdentifier.of("")).forGetter(BeeCoreData::honeycomb),
             RegistryPredicate.codec(BuiltInRegistries.BLOCK).optionalFieldOf("flower", DEFAULT_FLOWERS).forGetter(BeeCoreData::blockFlowers),
             RegistryPredicate.codec(BuiltInRegistries.ENTITY_TYPE).optionalFieldOf("entityFlower", RegistryPredicate.empty()).forGetter(BeeCoreData::entityFlowers),
             Codec.intRange(600, Integer.MAX_VALUE).optionalFieldOf("maxTimeInHive", 2400).forGetter(BeeCoreData::maxTimeInHive),

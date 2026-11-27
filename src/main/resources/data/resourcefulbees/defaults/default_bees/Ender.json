@@ -29,7 +29,7 @@
         "feedAmount": 12
     },
     "resourcefulbees:trait/v1": {
-        "traits": ["ender"]
+        "traits": ["resourcefulbees:ender"]
     },
     "resourcefulbees:trade/v1": {
         "amount": {

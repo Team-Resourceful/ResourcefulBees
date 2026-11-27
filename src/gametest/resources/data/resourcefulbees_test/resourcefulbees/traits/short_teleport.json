@@ -1,0 +1,6 @@
+{
+    "displayItem": "minecraft:ender_pearl",
+    "specialAbilities": [
+        "resourcefulbees_test:short_teleport"
+    ]
+}

@@ -23,17 +23,16 @@ public interface Occupant {
     @Nullable Entity createEntity(Level level, BlockPos hivePos);
 
     static TypedEntityData<EntityType<?>> saveEntity(Entity entity) {
-        try (var reporter = new ProblemReporter.ScopedCollector(
-                entity.problemPath(),
-                ModConstants.LOGGER
-        )) {
+        try (var reporter = new ProblemReporter.ScopedCollector(entity.problemPath(), ModConstants.LOGGER)) {
             var output = TagValueOutput.createWithContext(
                     reporter,
                     entity.registryAccess()
             );
 
             entity.save(output);
-            BeehiveBlockEntity.IGNORED_BEE_TAGS.forEach(output::discard);
+            BeehiveBlockEntity.IGNORED_BEE_TAGS.stream()
+                    .filter(tag -> !tag.equals("UUID"))
+                    .forEach(output::discard);
 
             return TypedEntityData.of(
                     entity.getType(),
@@ -43,16 +42,15 @@ public interface Occupant {
     }
 
     @Nullable
-    static Entity loadEntity(
-            TypedEntityData<EntityType<?>> data,
-            Level level
-    ) {
-        CompoundTag tag = data.copyTagWithoutId();
-        BeehiveBlockEntity.IGNORED_BEE_TAGS.forEach(tag::remove);
+    static Entity loadEntity(TypedEntityData<EntityType<?>> data, Level level) {
+        CompoundTag tagWithoutId = data.copyTagWithoutId();
+        BeehiveBlockEntity.IGNORED_BEE_TAGS.stream()
+                .filter(tag -> !tag.equals("UUID"))
+                .forEach(tagWithoutId::remove);
 
         Entity entity = EntityType.loadEntityRecursive(
                 data.type(),
-                tag,
+                tagWithoutId,
                 level,
                 EntitySpawnReason.LOAD,
                 EntityProcessor.NOP

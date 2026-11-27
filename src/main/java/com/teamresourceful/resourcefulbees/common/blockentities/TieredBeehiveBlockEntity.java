@@ -183,7 +183,9 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
         try (ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(entity.problemPath(), ModConstants.LOGGER)) {
             TagValueOutput output = TagValueOutput.createWithContext(reporter, entity.registryAccess());
             entity.save(output);
-            BeehiveBlockEntity.IGNORED_BEE_TAGS.forEach(output::discard);
+            BeehiveBlockEntity.IGNORED_BEE_TAGS.stream()
+                    .filter(s -> !s.equals("UUID"))
+                    .forEach(output::discard);
             CompoundTag entityTag = output.buildResult();
             boolean hasNectar = entityTag.getBooleanOr("HasNectar", false);
             int maxTimeInHive = (int) (compat.resourcefulBees$getMaxTimeInHive() * hive.getBlock().getTier().timeModifier());

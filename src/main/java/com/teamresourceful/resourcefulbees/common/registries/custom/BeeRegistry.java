@@ -13,7 +13,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefullib.common.codecs.maps.DispatchMapCodec;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import com.teamresourceful.resourcefullib.common.exceptions.ValidationException;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryOps;
 
@@ -25,9 +25,9 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
 
     private static final BeeRegistry INSTANCE = new BeeRegistry();
     private static final Map<Identifier, JsonObject> RAW_DATA = new LinkedHashMap<>();
-    private static final Map<Identifier, CustomBeeData> CUSTOM_DATA = new LinkedHashMap<>();
-    private static final Map<ParentPair, WeightedCollection<FamilyUnit>> FAMILY_TREE = new HashMap<>();
     private static final Supplier<CustomBeeData> DEFAULT_DATA = Suppliers.memoize(() -> ResourcefulBeesAPI.getInitializers().data(ModIdentifier.of("error"), Map.of()));
+
+    private volatile Snapshot snapshot = new Snapshot(0, Map.of(), Map.of());
 
     private BeeRegistry() {
         // Single instanced classes do not need to be able to be extended
@@ -47,31 +47,31 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
     }
 
     public boolean containsBeeType(String beeType) {
-        return CUSTOM_DATA.containsKey(Identifier.parse(beeType));
+        return containsBeeType(Identifier.parse(beeType));
     }
 
     public boolean containsBeeType(Identifier beeType) {
-        return CUSTOM_DATA.containsKey(beeType);
+        return snapshot.bees.containsKey(beeType);
     }
 
     @Override
     public CustomBeeData getBeeData(String beeType) {
-        return CUSTOM_DATA.getOrDefault(Identifier.parse(beeType), DEFAULT_DATA.get());
+        return getBeeData(Identifier.parse(beeType));
     }
 
     @Override
     public CustomBeeData getBeeData(Identifier beeType) {
-        return CUSTOM_DATA.getOrDefault(beeType, DEFAULT_DATA.get());
+        return snapshot.bees.getOrDefault(beeType, DEFAULT_DATA.get());
     }
 
     @Override
     public Optional<CustomBeeData> getOptionalBeeData(String beeType) {
-        return Optional.ofNullable(CUSTOM_DATA.get(Identifier.parse(beeType)));
+        return getOptionalBeeData(Identifier.parse(beeType));
     }
 
     @Override
     public Optional<CustomBeeData> getOptionalBeeData(Identifier beeType) {
-        return Optional.ofNullable(CUSTOM_DATA.get(beeType));
+        return Optional.ofNullable(snapshot.bees.get(beeType));
     }
 
     /**
@@ -81,13 +81,21 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
      * data has populated correctly. Finally, the family trees and spawnable biomes
      * maps are constructed.
      */
-    public void regenerateCustomBeeData(RegistryAccess access) {
+    public synchronized void regenerateCustomBeeData(HolderLookup.Provider access) {
         DynamicOps<JsonElement> ops = access == null ? JsonOps.INSTANCE : RegistryOps.create(JsonOps.INSTANCE, access);
-        CUSTOM_DATA.clear();
 
-        RAW_DATA.forEach((id, json) -> CUSTOM_DATA.put(id, parseData(id, ops, json)));
+        Map<Identifier, CustomBeeData> updatedBees = new LinkedHashMap<>();
 
-        buildFamilyTree();
+        RAW_DATA.forEach((id, json) -> updatedBees.put(id, parseData(id, ops, json)));
+        Map<ParentPair, WeightedCollection<FamilyUnit>> updatedFamilyTree = buildFamilyTree(updatedBees);
+
+        Snapshot previous = snapshot;
+
+        snapshot = new Snapshot(
+                previous.revision() + 1,
+                Collections.unmodifiableMap(updatedBees),
+                Collections.unmodifiableMap(updatedFamilyTree)
+        );
     }
 
     private static CustomBeeData parseData(Identifier id, DynamicOps<JsonElement> ops, JsonObject jsonObject) {
@@ -121,32 +129,32 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
 
     @Override
     public Map<ParentPair, WeightedCollection<FamilyUnit>> getFamilyTree() {
-        return FAMILY_TREE;
+        return snapshot.familyTree();
     }
 
     @Override
     public boolean canParentsBreed(String parent1, String parent2) {
-        return FAMILY_TREE.containsKey(ParentPair.of(parent1, parent2));
+        return canParentsBreed(Identifier.parse(parent1), Identifier.parse(parent2));
     }
 
     @Override
     public boolean canParentsBreed(Identifier parent1, Identifier parent2) {
-        return FAMILY_TREE.containsKey(ParentPair.of(parent1, parent2));
+        return snapshot.familyTree().containsKey(ParentPair.of(parent1, parent2));
     }
 
     @Override
     public FamilyUnit getWeightedChild(String parent1, String parent2) {
-        return FAMILY_TREE.get(ParentPair.of(parent1, parent2)).next();
+        return getWeightedChild(Identifier.parse(parent1), Identifier.parse(parent2));
     }
 
     @Override
     public FamilyUnit getWeightedChild(Identifier parent1, Identifier parent2) {
-        return FAMILY_TREE.get(ParentPair.of(parent1, parent2)).next();
+        return snapshot.familyTree().get(ParentPair.of(parent1, parent2)).next();
     }
 
     @Override
     public double getAdjustedWeightForChild(FamilyUnit beeFamily) {
-        return FAMILY_TREE.get(beeFamily.getParents().parentPair()).getAdjustedWeight(beeFamily.weight());
+        return snapshot.familyTree().get(beeFamily.getParents().parentPair()).getAdjustedWeight(beeFamily.weight());
     }
 
     /**
@@ -167,12 +175,12 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
 
     @Override
     public Map<Identifier, CustomBeeData> getBees() {
-        return Collections.unmodifiableMap(CUSTOM_DATA);
+        return Collections.unmodifiableMap(snapshot.bees);
     }
 
     @Override
     public Set<CustomBeeData> getSetOfBees() {
-        return Set.copyOf(CUSTOM_DATA.values());
+        return Set.copyOf(snapshot.bees.values());
     }
 
     @Override
@@ -182,22 +190,49 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
 
     @Override
     public Set<Identifier> getBeeTypes() {
-        return Set.copyOf(CUSTOM_DATA.keySet());
+        return Set.copyOf(snapshot.bees.keySet());
     }
 
-    //region Setup
+    //region Family Tree Setup
 
-    private static void buildFamilyTree() {
-        FAMILY_TREE.clear();
-        CUSTOM_DATA.values().stream()
-                .filter(customBeeData -> customBeeData.getBreedData().hasParents())
-                .flatMap(customBeeData -> customBeeData.getBreedData().families().stream())
+    private static Map<ParentPair, WeightedCollection<FamilyUnit>> buildFamilyTree(Map<Identifier, CustomBeeData> bees) {
+        Map<ParentPair, WeightedCollection<FamilyUnit>> familyTree = new HashMap<>();
+
+        bees.values().stream()
+                .filter(data -> data.getBreedData().hasParents())
+                .flatMap(data -> data.getBreedData().families().stream())
                 .filter(FamilyUnit::validUnit)
-                .forEach(BeeRegistry::addBreedPairToFamilyTree);
+                .forEach(family -> addBreedPairToFamilyTree(familyTree, family));
+
+        return familyTree;
     }
 
-    private static void addBreedPairToFamilyTree(FamilyUnit beeFamily) {
-        FAMILY_TREE.computeIfAbsent(beeFamily.getParents().parentPair(), k -> new WeightedCollection<>()).add(beeFamily.weight(), beeFamily);
+    private static void addBreedPairToFamilyTree(Map<ParentPair, WeightedCollection<FamilyUnit>> familyTree, FamilyUnit beeFamily) {
+        familyTree.computeIfAbsent(beeFamily.getParents().parentPair(), key -> new WeightedCollection<>()).add(beeFamily.weight(), beeFamily);
     }
     //endregion
+
+    private record Snapshot(
+            long revision,
+            Map<Identifier, CustomBeeData> bees,
+            Map<ParentPair, WeightedCollection<FamilyUnit>> familyTree
+    ) {}
+
+    public record BeeDataLookup(
+            long revision,
+            CustomBeeData data
+    ) {}
+
+    public long revision() {
+        return snapshot.revision();
+    }
+
+    public BeeDataLookup getVersionedBeeData(Identifier id) {
+        Snapshot current = snapshot;
+
+        return new BeeDataLookup(
+                current.revision(),
+                current.bees().getOrDefault(id, DEFAULT_DATA.get())
+        );
+    }
 }

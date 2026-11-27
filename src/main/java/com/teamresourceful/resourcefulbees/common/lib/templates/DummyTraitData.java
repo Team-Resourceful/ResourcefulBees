@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.lib.templates;
 
 import com.google.common.collect.Sets;
 import com.teamresourceful.resourcefulbees.api.data.trait.*;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.AuraType;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.core.particles.ParticleTypes;
@@ -16,13 +17,13 @@ public final class DummyTraitData {
     }
 
     public static final Trait DUMMY_TRAIT_DATA = new Trait(
-            "template",
+            ModIdentifier.of("template"),
             Items.WITHER_ROSE,
             Sets.newHashSet(new PotionEffect(MobEffects.BLINDNESS.value(), 3)),
             Sets.newHashSet("inFire", "wither"),
             Sets.newHashSet(MobEffects.WEAKNESS.value(), MobEffects.OOZING.value()),
             Sets.newHashSet(new TraitDamageType("setOnFire", 4), new TraitDamageType("explosive", 3)),
-            Sets.newHashSet("teleport"),
+            Sets.newHashSet(ModIdentifier.of("teleport")),
             Sets.newHashSet(ParticleTypes.SMOKE, ParticleTypes.SOUL_FIRE_FLAME),
             Sets.newHashSet(new Aura(
                     AuraType.EXPERIENCE,

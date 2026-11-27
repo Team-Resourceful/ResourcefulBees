@@ -80,7 +80,7 @@ public final class Initializers {
 
     @FunctionalInterface
     public interface CoreInitializer {
-        BeeCoreData create(String honeycomb, RegistryPredicate<Block> flowers, RegistryPredicate<EntityType<?>> entityFlowers, int maxTimeInHive, List<Component> lore);
+        BeeCoreData create(Identifier honeycomb, RegistryPredicate<Block> flowers, RegistryPredicate<EntityType<?>> entityFlowers, int maxTimeInHive, List<Component> lore);
     }
 
     @FunctionalInterface
@@ -105,7 +105,7 @@ public final class Initializers {
 
     @FunctionalInterface
     public interface TraitInitializer {
-        BeeTraitData create(int range, int sculkCharge, Set<String> traits);
+        BeeTraitData create(int range, int sculkCharge, Set<Identifier> traits);
     }
 
     @FunctionalInterface

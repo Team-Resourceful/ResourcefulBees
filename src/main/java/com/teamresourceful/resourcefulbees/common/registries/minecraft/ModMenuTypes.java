@@ -18,23 +18,26 @@ public class ModMenuTypes {
 //            () -> MenuContentHelper.create(FakeFlowerMenu::new, PositionContent.SERIALIZER));
 
     public static final RegistryEntry<MenuType<ApiaryMenu>> APIARY = MENUS.register("apiary",
-        () -> MenuContentHelper.create(ApiaryMenu::new, PositionContent.SERIALIZER));
+            () -> MenuContentHelper.create(ApiaryMenu::new, PositionContent.SERIALIZER));
 
     public static final RegistryEntry<MenuType<BreederMenu>> BREEDER = MENUS.register("breeder",
-        () -> MenuContentHelper.create(BreederMenu::new, PositionContent.SERIALIZER));
+            () -> MenuContentHelper.create(BreederMenu::new, PositionContent.SERIALIZER));
 
     public static final RegistryEntry<MenuType<EnderBeeconMenu>> ENDER_BEECON = MENUS.register("ender_beecon",
-        () -> MenuContentHelper.create(EnderBeeconMenu::new, PositionContent.SERIALIZER));
+            () -> MenuContentHelper.create(EnderBeeconMenu::new, PositionContent.SERIALIZER));
 
     public static final RegistryEntry<MenuType<HoneyPotMenu>> HONEY_POT = MENUS.register("honey_pot",
-        () -> MenuContentHelper.create(HoneyPotMenu::new, PositionContent.SERIALIZER));
+            () -> MenuContentHelper.create(HoneyPotMenu::new, PositionContent.SERIALIZER));
 
     public static final RegistryEntry<MenuType<SolidificationChamberMenu>> SOLIDIFICATION_CHAMBER = MENUS.register("solidification_chamber",
-        () -> MenuContentHelper.create(SolidificationChamberMenu::new, PositionContent.SERIALIZER));
+            () -> MenuContentHelper.create(SolidificationChamberMenu::new, PositionContent.SERIALIZER));
 
     public static final RegistryEntry<MenuType<CentrifugeMenu>> CENTRIFUGE = MENUS.register("centrifuge",
-        () -> MenuContentHelper.create(CentrifugeMenu::new, PositionContent.SERIALIZER));
+            () -> MenuContentHelper.create(CentrifugeMenu::new, PositionContent.SERIALIZER));
 
     public static final RegistryEntry<MenuType<HoneyGeneratorMenu>> HONEY_GENERATOR = MENUS.register("honey_generator",
-        () -> MenuContentHelper.create(HoneyGeneratorMenu::new, PositionContent.SERIALIZER));
+            () -> MenuContentHelper.create(HoneyGeneratorMenu::new, PositionContent.SERIALIZER));
+
+    public static final RegistryEntry<MenuType<ColonyControllerMenu>> COLONY_CONTROLLER = MENUS.register("colony_controller",
+            () -> MenuContentHelper.create(ColonyControllerMenu::new, PositionContent.SERIALIZER));
 }

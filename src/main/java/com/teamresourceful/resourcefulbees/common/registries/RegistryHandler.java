@@ -7,7 +7,6 @@ import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.blocks.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
-import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluidType;
@@ -24,13 +23,18 @@ import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.CustomHon
 import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.fluid.CustomHoneyFluidData;
 import com.teamresourceful.resourcefullib.common.codecs.maps.DispatchMapCodec;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
+import com.teamresourceful.resourcefullib.common.fluid.ResourcefulBucketItem;
 import com.teamresourceful.resourcefullib.common.fluid.data.FluidData;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.core.dispenser.ShearsDispenseItemBehavior;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.*;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -97,20 +101,31 @@ public final class RegistryHandler {
     }
 
     private static void registerBee(Identifier name, float sizeModifier) {
-        RegistryEntry<EntityType<? extends CustomBeeEntity>> beeEntityType = ModEntities.BEES.register(
-                name.getPath(),
-                () -> CustomBeeEntityType.of(
+        var bee = ModEntities.ENTITY_TYPES.register(
+                name,
+                () -> CustomBeeEntityType.<ResourcefulBee>of(
                         name,
                         (type, level) -> new ResourcefulBee(type, level, name),
                         0.7F * sizeModifier,
                         0.6F * sizeModifier
                 )
         );
-        ModItems.SPAWN_EGG_ITEMS.register(name.getPath() + "_spawn_egg", SpawnEggItem::new, () -> new Item.Properties().spawnEgg(beeEntityType.get()).component(ModDataComponents.FALLBACK_ITEM_MODEL.get(), ModIdentifier.of("bee_spawn_egg")));
-        ModEntities.getModBees().put(name, beeEntityType);
+
+        ModEntities.addBee(name, bee);
+        Identifier eggId = name.withSuffix("_spawn_egg");
+
+        ModItems.SPAWN_EGG_ITEMS.register(
+                eggId,
+                () -> new SpawnEggItem(
+                        new Item.Properties()
+                                .setId(ResourceKey.create(Registries.ITEM, eggId))
+                                .spawnEgg(bee.get())
+                                .component(ModDataComponents.FALLBACK_ITEM_MODEL.get(), ModIdentifier.of("bee_spawn_egg"))
+                )
+        );
     }
 
-    private static void registerCustomHoney(String id, JsonObject honeyData) {
+    private static void registerCustomHoney(Identifier id, JsonObject honeyData) {
         var data = new DispatchMapCodec<>(Identifier.CODEC, HoneyDataRegistry.codec(id))
                 .parse(JsonOps.INSTANCE, honeyData)
                 .resultOrPartial(message -> ModConstants.LOGGER.error("Could not create Honey Data for {} honey: {}", id, message))
@@ -131,38 +146,50 @@ public final class RegistryHandler {
         }
     }
 
-    private static void registerHoneyBlock(String name, CustomHoneyData input) {
-        input.getOptionalData(CustomHoneyBlockData.SERIALIZER).ifPresent(data -> {
-            RegistryEntry<Block> block = ModBlocks.HONEY_BLOCKS.register(
-                    name + "_honey_block",
-                    properties -> new CustomHoneyBlock(properties, data),
-                    BlockBehaviour.Properties::of
-            );
-            ModItems.HONEY_BLOCK_ITEMS.register(
-                    name + "_honey_block",
-                    properties -> new BlockItem(block.get(), properties),
-                    () -> new Item.Properties().component(ModDataComponents.FALLBACK_ITEM_MODEL.get(), ModIdentifier.of("honey_block"))
-            );
-        });
+    private static void registerHoneyBlock(Identifier name, CustomHoneyData input) {
+        input.getOptionalData(CustomHoneyBlockData.SERIALIZER)
+                .ifPresent(data -> {
+                    Identifier id = name.withSuffix("_honey_block");
+
+                    var block = ModBlocks.HONEY_BLOCKS.register(id, () -> new CustomHoneyBlock(BlockBehaviour.Properties.of().setId(ResourceKey.create(Registries.BLOCK, id)), data));
+
+                    ModItems.HONEY_BLOCK_ITEMS.register(id, () -> new BlockItem(block.get(), new Item.Properties()
+                            .setId(ResourceKey.create(Registries.ITEM, id))
+                            .useBlockDescriptionPrefix()
+                            .component(ModDataComponents.FALLBACK_ITEM_MODEL.get(), ModIdentifier.of("honey_block"))));
+                });
     }
 
-    private static void registerHoneyBottle(String name, CustomHoneyData data) {
-        ModItems.HONEY_BOTTLE_ITEMS.register(
-                name + "_honey_bottle",
-                properties -> new CustomHoneyBottleItem(properties, data.getBottleData()),
-                () -> new Item.Properties().component(ModDataComponents.FALLBACK_ITEM_MODEL.get(), ModIdentifier.of("honey_bottle"))
-        );
+    private static void registerHoneyBottle(Identifier name, CustomHoneyData data) {
+        Identifier id = name.withSuffix("_honey_bottle");
+        ModItems.HONEY_BOTTLE_ITEMS.register(id, () -> new CustomHoneyBottleItem(new Item.Properties()
+                .setId(ResourceKey.create(Registries.ITEM, id))
+                .component(ModDataComponents.FALLBACK_ITEM_MODEL.get(), ModIdentifier.of("honey_bottle")),
+                data.getBottleData()));
     }
 
-    private static void registerHoneyFluid(String name, CustomHoneyData data) {
-        data.getOptionalData(CustomHoneyFluidData.SERIALIZER).ifPresent(fluidData -> {
-            RegistryEntry<FluidData> fluidType = ModFluids.FLUID_TYPES.register(name + "_honey", CustomHoneyFluidType.create(fluidData.fluidAttributesData()));
-            ModFluids.STILL_HONEY_FLUIDS.register(name + "_honey_fluid_source", () -> new CustomHoneyFluid.Still(fluidData, fluidType.get()));
-            ModFluids.FLOWING_HONEY_FLUIDS.register(name + "_honey_fluid_flowing", () -> new CustomHoneyFluid.Flowing(fluidData, fluidType.get()));
-            var bucket = ModItems.HONEY_BUCKET_ITEMS.register(name + "_honey_bucket", properties -> new BucketItem(fluidType.get().still().get(), properties), () -> new Item.Properties().stacksTo(1).component(ModDataComponents.FALLBACK_ITEM_MODEL.get(), ModIdentifier.of("honey_bucket")));
-            fluidType.get().setBucket(bucket);
-            ModBlocks.registerHoneyFluidBlock(name + "_honey_fluid_block", fluidData, fluidType.get());
-        });
+    private static void registerHoneyFluid(Identifier name, CustomHoneyData data) {
+        data.getOptionalData(CustomHoneyFluidData.SERIALIZER)
+                .ifPresent(fluidData -> {
+                    Identifier typeId = name.withSuffix("_honey");
+                    Identifier sourceId = name.withSuffix("_honey_fluid_source");
+                    Identifier flowingId = name.withSuffix("_honey_fluid_flowing");
+                    Identifier bucketId = name.withSuffix("_honey_bucket");
+                    Identifier blockId = name.withSuffix("_honey_fluid_block");
+
+                    var fluidType = ModFluids.FLUID_TYPES.register(typeId, CustomHoneyFluidType.create(fluidData.fluidAttributesData()));
+
+                    FluidData fluidTypeData = fluidType.get();
+
+                    ModFluids.STILL_HONEY_FLUIDS.register(sourceId, () -> new CustomHoneyFluid.Still(fluidData, fluidTypeData));
+                    ModFluids.FLOWING_HONEY_FLUIDS.register(flowingId, () -> new CustomHoneyFluid.Flowing(fluidData, fluidTypeData));
+
+                    ModItems.HONEY_BUCKET_ITEMS.register(bucketId, () -> new ResourcefulBucketItem(fluidTypeData, new Item.Properties()
+                            .setId(ResourceKey.create(Registries.ITEM, bucketId))
+                            .stacksTo(1)
+                            .component(ModDataComponents.FALLBACK_ITEM_MODEL.get(), ModIdentifier.of("honey_bucket"))));
+                    ModBlocks.registerHoneyFluidBlock(blockId, fluidData, fluidTypeData);
+                });
     }
 
     public static void registerDispenserBehaviors() {

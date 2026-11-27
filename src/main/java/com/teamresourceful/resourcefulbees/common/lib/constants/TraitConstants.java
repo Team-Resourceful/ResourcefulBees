@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants;
 
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
+import net.minecraft.resources.Identifier;
 
 public final class TraitConstants {
 
@@ -8,13 +9,12 @@ public final class TraitConstants {
         throw new UtilityClassException();
     }
 
-    public static final String SLIMY = "slimy";
-    public static final String FLAMMABLE = "flammable";
-    public static final String TELEPORT = "teleport";
-    public static final String SET_ON_FIRE = "setOnFire";
-    public static final String EXPLOSIVE = "explosive";
-    public static final String ANGRY = "angry";
-    public static final String SPIDER = "spider";
-    public static final String STARRY = "starry";
-    public static final String SCULK = "sculk";
+    public static final Identifier SLIMY = ModIdentifier.of("slimy");
+    public static final Identifier FLAMMABLE = ModIdentifier.of("flammable");
+    public static final Identifier TELEPORT = ModIdentifier.of("teleport");
+    public static final Identifier ANGRY = ModIdentifier.of("angry");
+    public static final Identifier SPIDER = ModIdentifier.of("spider");
+    public static final Identifier SCULK = ModIdentifier.of("sculk");
+    public static final Identifier CLINGY = ModIdentifier.of("clingy");
+    public static final Identifier COURIER = ModIdentifier.of("courier");
 }

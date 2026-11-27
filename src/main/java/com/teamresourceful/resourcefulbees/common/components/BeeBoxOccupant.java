@@ -50,7 +50,9 @@ public record BeeBoxOccupant(
             );
 
             entity.save(output);
-            BeehiveBlockEntity.IGNORED_BEE_TAGS.forEach(output::discard);
+            BeehiveBlockEntity.IGNORED_BEE_TAGS.stream()
+                    .filter(s -> !s.equals("UUID"))
+                    .forEach(output::discard);
 
             return new BeeBoxOccupant(
                     TypedEntityData.of(
@@ -65,7 +67,9 @@ public record BeeBoxOccupant(
     @Override
     public @Nullable Entity createEntity(Level level, BlockPos hivePos) {
         CompoundTag entityTag = this.entityData.copyTagWithoutId();
-        BeehiveBlockEntity.IGNORED_BEE_TAGS.forEach(entityTag::remove);
+        BeehiveBlockEntity.IGNORED_BEE_TAGS.stream()
+                .filter(s -> !s.equals("UUID"))
+                .forEach(entityTag::remove);
 
         Entity entity = EntityType.loadEntityRecursive(
                 this.entityData.type(),

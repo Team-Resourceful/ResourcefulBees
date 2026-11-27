@@ -20,13 +20,13 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -42,18 +42,30 @@ public class HoneyPotBlockEntity extends GUISyncedBlockEntity implements Content
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
+    public AbstractContainerMenu createMenu(int id, @NonNull Inventory playerInventory, @NonNull Player playerEntity) {
         return new HoneyPotMenu(id, playerInventory, this);
     }
 
     @Override
-    public @NotNull Component getDisplayName() {
+    public @NonNull Component getDisplayName() {
         return GuiTranslations.POT;
     }
 
     @Override
     public PositionContent createContent(ServerPlayer serverPlayer) {
         return new PositionContent(this.getBlockPos());
+    }
+
+    @Override
+    protected void loadAdditional(@NonNull ValueInput input) {
+        super.loadAdditional(input);
+        tank.deserialize(input);
+    }
+
+    @Override
+    protected void saveAdditional(@NonNull ValueOutput output) {
+        super.saveAdditional(output);
+        tank.serialize(output);
     }
 
     @Override

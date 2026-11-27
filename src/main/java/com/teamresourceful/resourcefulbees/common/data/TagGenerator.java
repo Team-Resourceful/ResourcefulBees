@@ -10,10 +10,7 @@ import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 //import dev.architectury.injectables.targets.ArchitecturyTarget;
 import net.minecraft.resources.Identifier;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -30,7 +27,8 @@ public final class TagGenerator {
     }
 
     public static void generateCommonData() {
-        generateTags(ModEntities.BEES, Identifier.fromNamespaceAndPath("minecraft","tags/entity_type/beehive_inhabitors.json"));
+        TAGS.put(Identifier.fromNamespaceAndPath("minecraft", "tags/entity_type/beehive_inhabitors.json"), new HashSet<>(ModEntities.getModBees().keySet()));
+        //generateTags(ModEntities.BEES, Identifier.fromNamespaceAndPath("minecraft","tags/entity_type/beehive_inhabitors.json"));
 
         generateTags(ModItems.HONEYCOMB_BLOCK_ITEMS, Identifier.fromNamespaceAndPath("c","tags/item/storage_blocks/honeycombs.json"));
         generateTags(ModBlocks.HONEYCOMB_BLOCKS, Identifier.fromNamespaceAndPath("c","tags/block/storage_blocks/honeycombs.json"));

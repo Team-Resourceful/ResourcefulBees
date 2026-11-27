@@ -38,7 +38,7 @@ public final class BeeTraitRow extends AbstractWidget {
 
         graphics.item(icon, iconX, iconY);
         graphics.text(font, trait.getDisplayName(), textX, getY() + 4, 0xFFFFFFFF);
-        graphics.text(font, Component.literal(trait.name()), textX, getY() + 15, 0xFF777777);
+        graphics.text(font, Component.literal(trait.name().getPath()), textX, getY() + 15, 0xFF777777);
 
         if (BeepediaScreenUtil.isInside(mouseX, mouseY, iconX, iconY, 16, 16)) {
             graphics.setTooltipForNextFrame(font, icon, mouseX, mouseY);

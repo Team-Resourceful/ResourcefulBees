@@ -68,7 +68,9 @@ public record JarOccupant(
         try (var reporter = new ProblemReporter.ScopedCollector(entity.problemPath(), ModConstants.LOGGER)) {
             var output = TagValueOutput.createWithContext(reporter, entity.registryAccess());
             entity.save(output);
-            BeehiveBlockEntity.IGNORED_BEE_TAGS.forEach(output::discard);
+            BeehiveBlockEntity.IGNORED_BEE_TAGS.stream()
+                    .filter(s -> !s.equals("UUID"))
+                    .forEach(output::discard);
             CompoundTag entityTag = output.buildResult();
             occupant = new JarOccupant(
                     Optional.of(TypedEntityData.of(entity.getType(), entityTag)),
@@ -96,7 +98,9 @@ public record JarOccupant(
         if (this.entityData.isEmpty()) return null;
         var data = this.entityData.get();
         CompoundTag entityTag = data.copyTagWithoutId();
-        BeehiveBlockEntity.IGNORED_BEE_TAGS.forEach(entityTag::remove);
+        BeehiveBlockEntity.IGNORED_BEE_TAGS.stream()
+                .filter(s -> !s.equals("UUID"))
+                .forEach(entityTag::remove);
         Entity entity = EntityType.loadEntityRecursive(data.type(), entityTag, level, EntitySpawnReason.LOAD, EntityProcessor.NOP);
         if (entity != null && entity.is(EntityTypeTags.BEEHIVE_INHABITORS)) {
             entity.setNoGravity(true);

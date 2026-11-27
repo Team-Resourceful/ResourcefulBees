@@ -30,7 +30,7 @@
     "model": "resourcefulbees:queen"
   },
   "resourcefulbees:trait/v1": {
-    "traits": [ "starry" ]
+    "traits": [ "resourcefulbees:starry" ]
   },
   "resourcefulbees:combat/v1": {
     "isInvulnerable": true,

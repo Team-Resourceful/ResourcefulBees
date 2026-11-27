@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.components.ApiaryBees;
 import com.teamresourceful.resourcefulbees.common.components.ApiaryOccupant;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
+import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.lib.util.EntityUtils;
 import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
@@ -25,6 +26,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,22 +49,36 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity implemen
         return this.bees.stream().map(ApiaryOccupant.Mutable::immutable).toList();
     }
 
+
     public boolean releaseBee(@NotNull BlockState state, ApiaryOccupant apiaryBee) {
-        BlockPos blockPos = this.getBlockPos();
-        Direction direction = state.getValue(BeehiveBlock.FACING);
-        BlockPos blockPos1 = blockPos.relative(direction);
-        if (level != null && this.level.getBlockState(blockPos1).getCollisionShape(this.level, blockPos1).isEmpty()) {
-            Entity entity = apiaryBee.createEntity(level, blockPos);
-            if (entity != null) {
-                EntityUtils.setEntityLocationAndAngle(blockPos, direction, entity);
-                deliverNectar(apiaryBee.hasNectar(), entity);
-                level.playSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SoundEvents.BEEHIVE_EXIT, SoundSource.BLOCKS, 1.0F, 1.0F);
-                level.addFreshEntity(entity);
-            }
-            return true;
+        if (level == null || apiaryBee.locked()) {
+            return false;
         }
-        return false;
+        BlockPos pos = getBlockPos();
+        Direction direction = state.getValue(BeehiveBlock.FACING);
+        BlockPos exitPos = pos.relative(direction);
+        if (!level.getBlockState(exitPos).getCollisionShape(level, exitPos).isEmpty()) {
+            return false;
+        }
+        Entity entity = apiaryBee.createEntity(level, pos);
+        if (entity == null) {
+            return false;
+        }
+        EntityUtils.setEntityLocationAndAngle(pos, direction, entity);
+        if (!level.addFreshEntity(entity)) {
+            return false;
+        }
+        onBeeReleased(entity);
+        deliverNectar(apiaryBee.hasNectar(), entity);
+        level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BEEHIVE_EXIT, SoundSource.BLOCKS, 1.0F, 1.0F);
+        return true;
     }
+
+
+    protected void onBeeReleased(Entity entity) {
+        // Optional hook for subclasses.
+    }
+
 
     protected abstract void deliverNectar(boolean hasNectar, Entity bee);
 
@@ -77,11 +93,12 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity implemen
 
     public void storeBee(ApiaryOccupant occupant) {
         this.bees.add(occupant.mutable());
+        setChanged();
     }
 
-    protected abstract int getMaxTimeInHive(@NotNull BeeCompat bee);
+    public abstract int getMaxTimeInHive(@NotNull BeeCompat bee, boolean hasNectar);
 
-    public static <T extends BeeHolderBlockEntity> void serverTick(Level level, BlockPos pos, BlockState state, T holder) {
+    public static <T extends BeeHolderBlockEntity> void serverTick(Level level, BlockPos pos, BlockState state, @NonNull T holder) {
         boolean dirty = false;
         ApiaryOccupant.Mutable bee;
         var iterator = holder.bees.iterator();
@@ -119,7 +136,7 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity implemen
 
     public abstract boolean hasSpace();
 
-    public abstract boolean isAllowedBee();
+    public abstract boolean isAllowedBee(@Nullable ResourcefulBee bee);
 
     public void lockOrUnlockBee(int bee) {
         if (bee < bees.size() && bee >= 0) this.bees.get(bee).toggleLocked();

@@ -22,6 +22,7 @@ group = mod_group_id
 
 repositories {
     // Add here additional repositories if required by some of the dependencies below.
+    mavenLocal()
     maven { url = "https://maven.teamresourceful.com/repository/maven-public/" }
     maven { url = "https://cursemaven.com" }
 }
@@ -32,6 +33,21 @@ base {
 
 // Mojang ships Java 21 to end users in 1.21.1, so mods should target Java 21.
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
+
+sourceSets {
+    gameTest {
+        // Include the main mod's compiled classes/resources.
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+
+configurations {
+    gameTestImplementation.extendsFrom implementation
+    gameTestCompileClasspath.extendsFrom compileClasspath
+    gameTestCompileOnly.extendsFrom compileOnly
+    gameTestRuntimeOnly.extendsFrom runtimeOnly
+}
 
 neoForge {
     // Specify the version of NeoForge to use.
@@ -52,7 +68,7 @@ neoForge {
 
         server {
             server()
-            programArgument '--nogui'
+            //programArgument '--nogui'
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
@@ -97,6 +113,23 @@ neoForge {
         "${mod_id}" {
             sourceSet(sourceSets.main)
         }
+
+        resourcefulbees_gametest {
+            sourceSet(sourceSets.gameTest)
+        }
+    }
+}
+
+def mainMod = neoForge.mods.getByName(project.mod_id)
+def testMod = neoForge.mods.getByName('resourcefulbees_gametest')
+
+neoForge.runs.named('gameTestServer') {
+    loadedMods = [mainMod, testMod]
+}
+
+['client', 'server', 'data'].each { runName ->
+    neoForge.runs.named(runName) {
+        loadedMods = [mainMod]
     }
 }
 

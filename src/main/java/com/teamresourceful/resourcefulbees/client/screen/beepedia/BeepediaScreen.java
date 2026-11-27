@@ -170,7 +170,7 @@ public final class BeepediaScreen extends Screen implements BeepediaNavigator {
                 .filter(trait ->
                         query.isEmpty()
                                 || trait.name()
-                                .toLowerCase(Locale.ROOT)
+                                .toString()
                                 .contains(query)
                                 || trait.getDisplayName()
                                 .getString()
@@ -188,7 +188,7 @@ public final class BeepediaScreen extends Screen implements BeepediaNavigator {
                 .filter(honey ->
                         query.isEmpty()
                                 || honey.name()
-                                .toLowerCase(Locale.ROOT)
+                                .toString()
                                 .contains(query)
                                 || honey.displayName()
                                 .getString()
@@ -310,11 +310,11 @@ public final class BeepediaScreen extends Screen implements BeepediaNavigator {
                 case BeepediaSelection.Home _ -> buildHome(layout);
 
                 case BeepediaSelection.Bee(Identifier id) -> BeeRegistry.get().getOptionalBeeData(id)
-                        .ifPresentOrElse(bee -> buildBeePage(layout, bee), () -> buildMissingEntry(layout, id.toString()));
+                        .ifPresentOrElse(bee -> buildBeePage(layout, bee), () -> buildMissingEntry(layout, id));
 
-                case BeepediaSelection.Trait(String id) -> buildTraitPage(layout, id);
+                case BeepediaSelection.Trait(Identifier id) -> buildTraitPage(layout, id);
 
-                case BeepediaSelection.Honey(String id) -> buildHoneyPage(layout, id);
+                case BeepediaSelection.Honey(Identifier id) -> buildHoneyPage(layout, id);
             }
         });
     }
@@ -411,10 +411,7 @@ public final class BeepediaScreen extends Screen implements BeepediaNavigator {
                 .withCallback(() -> select(new BeepediaSelection.Honey(honey.name())));
     }
 
-    private static WidgetRenderer<AbstractWidget> itemButton(
-            Component text,
-            ItemStack stack
-    ) {
+    private static WidgetRenderer<AbstractWidget> itemButton(Component text, ItemStack stack) {
         return WidgetRenderers.layered(
                 (graphics, widget, _) -> graphics.item(stack, widget.getX(), widget.getY()),
                 WidgetRenderers.text(text)
@@ -524,14 +521,14 @@ public final class BeepediaScreen extends Screen implements BeepediaNavigator {
         return Widgets.text(Component.literal("Bees Found: " + discovered + " / " + total + "  "), TextWidget::withRightAlignment); //two spaces at the end are intentional padding bc padding right doesnt work in this case
     }
 
-    private void buildMissingEntry(LinearViewLayout layout, String id) {
+    private void buildMissingEntry(LinearViewLayout layout, Identifier id) {
         layout.withGap(6);
 
         layout.withChild(Widgets.text(Component.literal("Entry Not Found"), text -> text.withShadow().withLeftAlignment()));
         layout.withChild(Widgets.textarea(Component.literal("The Beepedia entry \"" + id + "\" is no longer available."), contentWidth));
     }
 
-    private void buildTraitPage(LinearViewLayout layout, String id) {
+    private void buildTraitPage(LinearViewLayout layout, Identifier id) {
         Trait trait = TraitRegistry.get().getTrait(id);
 
         if (trait == null) {
@@ -542,7 +539,7 @@ public final class BeepediaScreen extends Screen implements BeepediaNavigator {
         TraitOverview.build(layout, trait, contentWidth);
     }
 
-    private void buildHoneyPage(LinearViewLayout layout, String id) {
+    private void buildHoneyPage(LinearViewLayout layout, Identifier id) {
         var honey = HoneyRegistry.get().getOptionalHoneyData(id);
 
         honey.ifPresentOrElse(data -> HoneyOverview.build(layout, data, contentWidth), () -> buildMissingEntry(layout, id));
@@ -585,12 +582,12 @@ public final class BeepediaScreen extends Screen implements BeepediaNavigator {
     }
 
     @Override
-    public void openTrait(String id) {
+    public void openTrait(Identifier id) {
         select(new BeepediaSelection.Trait(id));
     }
 
     @Override
-    public void openHoney(String id) {
+    public void openHoney(Identifier id) {
         select(new BeepediaSelection.Honey(id));
     }
 }

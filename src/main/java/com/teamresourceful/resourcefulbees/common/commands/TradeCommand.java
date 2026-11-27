@@ -18,6 +18,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -74,7 +75,7 @@ public class TradeCommand {
         HoneyRegistry.getRegistry()
                 .getStreamOfHoney()
                 .forEach(honey -> {
-                    String honeyName = honey.name();
+                    Identifier honeyName = honey.name();
 
                     // Honey bottle
                     HoneyBottleData bottleData = honey.getBottleData();

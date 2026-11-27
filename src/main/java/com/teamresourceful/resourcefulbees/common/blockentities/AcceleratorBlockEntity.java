@@ -21,7 +21,7 @@ public class AcceleratorBlockEntity extends BlockEntity implements InstanceBlock
     }
 
     @Override
-    public void serverTick(Level level, BlockPos pos, BlockState state) {
+    public void serverTick(ServerLevel level, BlockPos pos, BlockState state) {
         accelerateTick(level, pos.below());
         accelerateTick(level, pos.above());
         accelerateTick(level, pos.north());

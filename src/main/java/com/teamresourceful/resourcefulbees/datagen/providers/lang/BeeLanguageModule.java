@@ -101,6 +101,7 @@ public class BeeLanguageModule implements LanguageModule {
         provider.addTraitType("wither", "Wither");
         provider.addTraitType("blaze", "Blaze");
         provider.addTraitType("can_swim", "Can Swim");
+        provider.addTraitType("clingy", "Clingy");
         provider.addTraitType("creeper", "Creeper");
         provider.addTraitType("zombee", "Zombee");
         provider.addTraitType("pigman", "Pigman");

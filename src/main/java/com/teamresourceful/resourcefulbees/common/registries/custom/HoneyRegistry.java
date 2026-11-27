@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.registries.custom;
 
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
+import net.minecraft.resources.Identifier;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -10,8 +11,8 @@ public final class HoneyRegistry implements com.teamresourceful.resourcefulbees.
 
     private static final HoneyRegistry INSTANCE = new HoneyRegistry();
 
-    private final Map<String, JsonObject> rawHoneyData = new LinkedHashMap<>();
-    private final Map<String, CustomHoneyData> honeyInfo = new LinkedHashMap<>();
+    private final Map<Identifier, JsonObject> rawHoneyData = new LinkedHashMap<>();
+    private final Map<Identifier, CustomHoneyData> honeyInfo = new LinkedHashMap<>();
 
     private HoneyRegistry() {
         // Single instanced classes do not need to be able to be extended
@@ -25,26 +26,31 @@ public final class HoneyRegistry implements com.teamresourceful.resourcefulbees.
     }
 
     @Override
-    public boolean containsHoney(String honey) {
+    public boolean containsHoney(Identifier honey) {
         return honeyInfo.containsKey(honey);
     }
 
     @Override
-    public CustomHoneyData getHoneyData(String honey) {
+    public boolean containsHoney(String name) {
+        return honeyInfo.containsKey(Identifier.parse(name));
+    }
+
+    @Override
+    public CustomHoneyData getHoneyData(Identifier honey) {
         return honeyInfo.get(honey);
     }
 
     @Override
-    public Optional<CustomHoneyData> getOptionalHoneyData(String honey) {
+    public Optional<CustomHoneyData> getOptionalHoneyData(Identifier honey) {
         return Optional.ofNullable(honeyInfo.get(honey));
     }
 
-    public void cacheRawHoneyData(String name, JsonObject jsonObject) {
+    public void cacheRawHoneyData(Identifier name, JsonObject jsonObject) {
         rawHoneyData.putIfAbsent(name, jsonObject);
     }
 
     @Override
-    public Map<String, CustomHoneyData> getHoneyBottles() {
+    public Map<Identifier, CustomHoneyData> getHoneyBottles() {
         return Collections.unmodifiableMap(honeyInfo);
     }
 
@@ -59,7 +65,7 @@ public final class HoneyRegistry implements com.teamresourceful.resourcefulbees.
     }
 
     @Override
-    public Set<String> getHoneyTypes() {
+    public Set<Identifier> getHoneyTypes() {
         return Collections.unmodifiableSet(honeyInfo.keySet());
     }
 
@@ -71,7 +77,7 @@ public final class HoneyRegistry implements com.teamresourceful.resourcefulbees.
      * @param honeyData HoneyData of the honey being registered
      * @return Returns false if honey already exists in the registry.
      */
-    public boolean register(String honeyType, CustomHoneyData honeyData) {
+    public boolean register(Identifier honeyType, CustomHoneyData honeyData) {
         return honeyInfo.putIfAbsent(honeyType, honeyData) == null;
     }
 
@@ -80,7 +86,7 @@ public final class HoneyRegistry implements com.teamresourceful.resourcefulbees.
      *
      * @return Returns a Map containing the raw json data.
      */
-    public Map<String, JsonObject> getRawHoney() {
+    public Map<Identifier, JsonObject> getRawHoney() {
         return Collections.unmodifiableMap(rawHoneyData);
     }
 }

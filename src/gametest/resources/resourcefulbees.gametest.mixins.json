@@ -1,0 +1,12 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "com.teamresourceful.resourcefulbees_test.mixin",
+    "compatibilityLevel": "JAVA_25",
+    "mixins": [
+        "BeeAccessor"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

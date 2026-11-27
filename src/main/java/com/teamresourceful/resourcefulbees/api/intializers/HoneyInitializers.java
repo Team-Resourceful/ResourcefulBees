@@ -30,12 +30,12 @@ public final class HoneyInitializers {
 
     @FunctionalInterface
     public interface HoneyDataInitializer {
-        CustomHoneyData create(String name, Map<Identifier, HoneyData<?>> data);
+        CustomHoneyData create(Identifier name, Map<Identifier, HoneyData<?>> data);
     }
 
     @FunctionalInterface
     public interface HoneyFluidDataInitializer {
-        HoneyFluidData create(String id, HoneyRenderData renderData, HoneyFluidAttributesData attributes, LazyHolder<Fluid> still, LazyHolder<Fluid> flowing, LazyHolder<Item> bucket, LazyHolder<Block> block, BeekeeperTradeData tradeData, Set<Pair<Holder<MobEffect>, Float>> beeconEffects);
+        HoneyFluidData create(Identifier id, HoneyRenderData renderData, HoneyFluidAttributesData attributes, LazyHolder<Fluid> still, LazyHolder<Fluid> flowing, LazyHolder<Item> bucket, LazyHolder<Block> block, BeekeeperTradeData tradeData, Set<Pair<Holder<MobEffect>, Float>> beeconEffects);
     }
 
     @FunctionalInterface
@@ -50,12 +50,12 @@ public final class HoneyInitializers {
 
     @FunctionalInterface
     public interface HoneyBlockDataInitializer {
-        HoneyBlockData create(Color color, float jumpFactor, float speedFactor, LazyHolder<Item> blockItem, LazyHolder<Block> block, BeekeeperTradeData tradeData, String id);
+        HoneyBlockData create(Color color, float jumpFactor, float speedFactor, LazyHolder<Item> blockItem, LazyHolder<Block> block, BeekeeperTradeData tradeData, Identifier id);
     }
 
     @FunctionalInterface
     public interface HoneyBottleDataInitializer {
-        HoneyBottleData create(String id, Color color, HoneyFoodData food, Rarity rarity, LazyHolder<Item> bottle, BeekeeperTradeData tradeData);
+        HoneyBottleData create(Identifier id, Color color, HoneyFoodData food, Rarity rarity, LazyHolder<Item> bottle, BeekeeperTradeData tradeData);
     }
 
     @FunctionalInterface

@@ -73,7 +73,7 @@ public class InitializerApi {
     }
 
     @NullMarked
-    public BeeCoreData core(String honeycomb, RegistryPredicate<Block> flowers, RegistryPredicate<EntityType<?>> entityFlowers, int maxTimeInHive, List<Component> lore) {
+    public BeeCoreData core(Identifier honeycomb, RegistryPredicate<Block> flowers, RegistryPredicate<EntityType<?>> entityFlowers, int maxTimeInHive, List<Component> lore) {
         return this.core.create(honeycomb, flowers, entityFlowers, maxTimeInHive, lore);
     }
 
@@ -83,7 +83,7 @@ public class InitializerApi {
     }
 
     @NullMarked
-    public BeeTraitData trait(int range, int sculkCharge, Set<String> traits) {
+    public BeeTraitData trait(int range, int sculkCharge, Set<Identifier> traits) {
         return this.traits.create(range, sculkCharge, traits);
     }
 

@@ -126,8 +126,7 @@ public final class GameSetup {
         event.registerBlockEntity(Capabilities.Fluid.BLOCK, ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get(), (blockEntity, context) -> blockEntity.tank());
         event.registerBlockEntity(Capabilities.Energy.BLOCK, ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get(), (blockEntity, context) -> blockEntity.battery());
         event.registerBlockEntity(Capabilities.Fluid.BLOCK, ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), (blockEntity, context) -> blockEntity.tank());
-
-
-        event.registerItem(Capabilities.Fluid.ITEM, (object, context) ->  new BucketResourceHandler(context), ModItems.HONEY_BUCKET.get());
+        ModItems.HONEY_BUCKET_ITEMS.getEntries().forEach(entry ->
+                event.registerItem(Capabilities.Fluid.ITEM, (stack, context) -> new BucketResourceHandler(context), entry.get()));
     }
 }

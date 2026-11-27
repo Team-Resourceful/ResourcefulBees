@@ -213,7 +213,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
     }
 
     @Override
-    public void serverTick(Level level, BlockPos pos, BlockState state) {
+    public void serverTick(ServerLevel level, BlockPos pos, BlockState state) {
         // pull from below containers
         pullFluidFromBelow();
 

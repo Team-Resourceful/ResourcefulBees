@@ -13,6 +13,7 @@ import com.teamresourceful.yabn.elements.YabnObject;
 import com.teamresourceful.yabn.elements.YabnPrimitive;
 import com.teamresourceful.yabn.elements.primitives.StringContents;
 import com.teamresourceful.yabn.reader.ArrayByteReader;
+import net.minecraft.resources.Identifier;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -53,9 +54,9 @@ public final class MissingRegistrySetup {
         YabnArray beeArray = new YabnArray();
         YabnArray honeyArray = new YabnArray();
         YabnArray combArray = new YabnArray();
-        BeeRegistry.get().getBeeTypes().forEach(bee -> beeArray.add(YabnPrimitive.ofString(bee.toString())));
-        HoneyRegistry.get().getHoneyTypes().forEach(honey -> honeyArray.add(YabnPrimitive.ofString(honey)));
-        HoneycombRegistry.get().getHoneycombTypes().forEach(comb -> combArray.add(YabnPrimitive.ofString(comb)));
+        BeeRegistry.get().getBeeTypes().forEach(bee -> beeArray.add(YabnPrimitive.ofString(String.valueOf(bee))));
+        HoneyRegistry.get().getHoneyTypes().forEach(honey -> honeyArray.add(YabnPrimitive.ofString(String.valueOf(honey))));
+        HoneycombRegistry.get().getVariationIDs().forEach(comb -> combArray.add(YabnPrimitive.ofString(String.valueOf(comb))));
         object.put("b", beeArray);
         object.put("h", honeyArray);
         object.put("c", combArray);
@@ -69,7 +70,7 @@ public final class MissingRegistrySetup {
     private static void checkHoneycombRegistry(YabnArray array) {
         StringBuilder missingCombs = new StringBuilder();
         getStrings(array).stream()
-                .filter(s -> !HoneycombRegistry.get().containsHoneycomb(s) && (anyRegistriesMissing = true))
+                .filter(s -> !HoneycombRegistry.get().containsVariation(Identifier.parse(s)) && (anyRegistriesMissing = true))
                 .forEach(s -> missingCombs.append("    - ").append(s).append("\n"));
         if (!missingCombs.isEmpty()) ModConstants.LOGGER.warn("\nThe following combs are missing from the registry: \n {}", missingCombs);
     }

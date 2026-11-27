@@ -26,7 +26,7 @@ public final class HoneyHeader {
         LinearLayout text = LinearLayout.vertical().spacing(1);
 
         text.addChild(Widgets.text(honey.displayName(), TextWidget::withLeftAlignment).withColor(Color.DEFAULT));
-        text.addChild(Widgets.text(Component.literal(honey.name()), widget -> widget.withLeftAlignment().withColor(Color.parse("gray"))));
+        text.addChild(Widgets.text(Component.literal(honey.name().toString()), widget -> widget.withLeftAlignment().withColor(Color.parse("gray"))));
 
         header.addChild(text, LayoutSettings::alignVerticallyBottom);
         layout.withChild(header);

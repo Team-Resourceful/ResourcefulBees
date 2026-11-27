@@ -1,0 +1,6 @@
+{
+    "type": "resourcefulbees:teleport",
+    "displayItem": "minecraft:ender_pearl",
+    "cooldown": 60,
+    "range": 4.0
+}

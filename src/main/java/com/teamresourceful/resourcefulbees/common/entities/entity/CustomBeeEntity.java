@@ -11,12 +11,12 @@ import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
-import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.DataConstants;
 import com.teamresourceful.resourcefulbees.common.lib.util.ModUtils;
+import com.teamresourceful.resourcefulbees.common.registries.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
 import net.minecraft.core.BlockPos;
@@ -52,7 +52,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCompat {
+public abstract class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCompat {
 
     private static final EntityDataAccessor<Integer> FEED_COUNT = SynchedEntityData.defineId(CustomBeeEntity.class, EntityDataSerializers.INT);
 
@@ -61,21 +61,52 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
 
     private final AnimatableInstanceCache animationCache = GeckoLibUtil.createInstanceCache(this);
 
-    protected final CustomBeeData customBeeData;
+    protected final Identifier beeType;
+    private CustomBeeData customBeeData;
+    private long cachedBeeDataRevision;
     private boolean hasHiveInRange;
     private int disruptorInRange;
     private boolean beekeeperInRange = false;
 
     public CustomBeeEntity(EntityType<? extends Bee> type, Level world, Identifier beeType) {
         super(type, world);
-        this.customBeeData = BeeRegistry.get().getBeeData(beeType);
+        this.beeType = beeType;
+        BeeRegistry.BeeDataLookup lookup = BeeRegistry.getRegistry().getVersionedBeeData(beeType);
+
+        this.customBeeData = lookup.data();
+        this.cachedBeeDataRevision = lookup.revision();
     }
 
     //region BEE INFO RELATED METHODS BELOW
 
+
+    @Override
+    public Identifier getBeeType() {
+        return beeType;
+    }
+
     @Override
     public CustomBeeData getBeeData() {
+        BeeRegistry registry = BeeRegistry.getRegistry();
+
+        if (cachedBeeDataRevision != registry.revision()) {
+            BeeRegistry.BeeDataLookup lookup = registry.getVersionedBeeData(beeType);
+
+            CustomBeeData previous = customBeeData;
+
+            customBeeData = lookup.data();
+            cachedBeeDataRevision = lookup.revision();
+
+            if (previous != customBeeData) {
+                onBeeDataChanged(previous, customBeeData);
+            }
+        }
+
         return customBeeData;
+    }
+
+    protected void onBeeDataChanged(CustomBeeData previous, CustomBeeData current) {
+        // No additional state to refresh in the base entity.
     }
 
     @Override

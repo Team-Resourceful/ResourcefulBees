@@ -25,7 +25,7 @@
         ]
     },
     "resourcefulbees:trait/v1": {
-        "traits": ["slimy"]
+        "traits": ["resourcefulbees:slimy"]
     },
     "resourcefulbees:trade/v1": {
         "amount": {

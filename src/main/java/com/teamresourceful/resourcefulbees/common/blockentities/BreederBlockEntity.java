@@ -17,6 +17,7 @@ import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -32,8 +33,6 @@ import net.neoforged.neoforge.transfer.transaction.Transaction;
 import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
-
-import java.util.List;
 
 public class BreederBlockEntity extends BlockEntity implements ContentMenuProvider<PositionContent> {
 
@@ -78,12 +77,12 @@ public class BreederBlockEntity extends BlockEntity implements ContentMenuProvid
     }
 
     private void checkAndCacheRecipe(int i) {
-        if (level == null || level.getServer() == null) {
+        if (level == null || level.isClientSide()) {
             recipes[i] = null;
             return;
         }
 
-        var recipeHolder = level.getServer().getRecipeManager().getRecipeFor(ModRecipes.BREEDER_RECIPE_TYPE.get(), makeRecipeInput(i), level).orElse(null);
+        var recipeHolder = ((ServerLevel) level).recipeAccess().getRecipeFor(ModRecipes.BREEDER_RECIPE_TYPE.get(), makeRecipeInput(i), level).orElse(null);
         recipes[i] = recipeHolder == null ? null : recipeHolder.value();
         if (recipes[i] != null) {
             recalculateRecipeEndtimes(inventory.getAmountAsInt(BreederConstants.UPGRADE_SLOT));
@@ -102,49 +101,74 @@ public class BreederBlockEntity extends BlockEntity implements ContentMenuProvid
 
     private void processBreed(int breeder) {
         BreederRecipe recipe = recipes[breeder];
+
         if (recipe == null || level == null) return;
 
         var output = recipe.outputs().next();
-        var recipeSuccess = output.chance() >= level.getRandom().nextFloat();
+        if (output.chance() < level.getRandom().nextFloat()) return;
 
-        if (recipeSuccess) {
+        if (!recipe.matches(makeRecipeInput(breeder), level)) {
+            checkAndCacheRecipe(breeder);
+            return;
+        }
 
-            try (Transaction transaction = Transaction.openRoot()) {
-                inventory.extract(
-                        BreederConstants.EMPTY_JAR_SLOTS.get(breeder),
-                        inventory.getResource(BreederConstants.EMPTY_JAR_SLOTS.get(breeder)),
-                        1,
-                        transaction);
-                ItemStack stack = output.child().create();
-                stack.setCount(1);
-                deliverItem(stack, transaction);
+        ItemStack result = output.child().create();
+        result.setCount(1);
 
-                extractFeedItems(BreederConstants.FEED_1_SLOTS, breeder, recipe.parent1(), transaction);
-                extractFeedItems(BreederConstants.FEED_2_SLOTS, breeder, recipe.parent2(), transaction);
-                transaction.commit();
-            }
+        if (tryProcessBreed(breeder, recipe, result)) {
             checkAndCacheRecipe(breeder);
         }
     }
 
-    private void extractFeedItems(List<Integer> feedSlots, int breeder, ParentInput parent, TransactionContext context) {
-        getItem(feedSlots.get(breeder)).shrink(parent.feedAmount());
-        inventory.extract(
-                feedSlots.get(breeder),
-                inventory.getResource(feedSlots.get(breeder)),
-                parent.feedAmount(),
-                context
+    private boolean tryProcessBreed(int breeder, BreederRecipe recipe, ItemStack result) {
+        int feed1Slot = BreederConstants.FEED_1_SLOTS.get(breeder);
+        int feed2Slot = BreederConstants.FEED_2_SLOTS.get(breeder);
+        int optionalSlot = BreederConstants.EMPTY_JAR_SLOTS.get(breeder);
+
+        boolean normal = recipe.parent1().matches(
+                getItem(BreederConstants.PARENT_1_SLOTS.get(breeder)),
+                getItem(feed1Slot)
+        ) && recipe.parent2().matches(
+                getItem(BreederConstants.PARENT_2_SLOTS.get(breeder)),
+                getItem(feed2Slot)
         );
-        parent.returnItem().ifPresent(item -> {
-            ItemStack returnItem = item.create();
-            returnItem.setCount(parent.feedAmount());
-            deliverItem(returnItem, context);
-        });
+
+        ParentInput first = normal ? recipe.parent1() : recipe.parent2();
+        ParentInput second = normal ? recipe.parent2() : recipe.parent1();
+
+        try (Transaction transaction = Transaction.openRoot()) {
+            if (!deliverItem(result, transaction)) return false;
+
+            if (!extractAmount(optionalSlot, 1, transaction)) return false;
+            if (!extractAmount(feed1Slot, first.feedAmount(), transaction)) return false;
+            if (!extractAmount(feed2Slot, second.feedAmount(), transaction)) return false;
+
+            if (!deliverReturnItem(first, transaction)) return false;
+            if (!deliverReturnItem(second, transaction)) return false;
+
+            transaction.commit();
+            return true;
+        }
     }
 
-    private void deliverItem(ItemStack stack, TransactionContext context) {
-        inventory.insertOutput(ItemResource.of(stack), stack.count(), context);
+    private boolean extractAmount(int slot, int amount, TransactionContext context) {
+        return inventory.extract(slot, inventory.getResource(slot), amount, context) == amount;
     }
+
+    private boolean deliverReturnItem(ParentInput parent, TransactionContext context) {
+        if (parent.returnItem().isEmpty()) return true;
+
+        ItemStack stack = parent.returnItem().get().create();
+        stack.setCount(parent.feedAmount());
+
+        return deliverItem(stack, context);
+    }
+
+
+    private boolean deliverItem(ItemStack stack, TransactionContext context) {
+        return inventory.insertOutput(ItemResource.of(stack), stack.getCount(), context) == stack.getCount();
+    }
+
 
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
@@ -199,7 +223,9 @@ public class BreederBlockEntity extends BlockEntity implements ContentMenuProvid
     }
 
     public ItemStack getItem(int index) {
-        return inventory.getResource(index).toStack();
+        ItemStack stack = inventory.getResource(index).toStack();
+        stack.setCount(inventory.getAmountAsInt(index));
+        return stack;
     }
 
     public class ResourceHandler extends IOResourceHandler {

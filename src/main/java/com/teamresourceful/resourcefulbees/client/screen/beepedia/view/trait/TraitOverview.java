@@ -100,11 +100,12 @@ public final class TraitOverview {
                 .stream()
                 .sorted()
                 .forEach(ability -> {
-                    layout.withChild(Widgets.text(Component.literal(humanize(ability)).withColor(TextColor.WHITE), TextWidget::withLeftAlignment));
-                    layout.withChild(Widgets.textarea(abilityDescription(ability), contentWidth));
+                    layout.withChild(Widgets.text(Component.literal(humanize(ability.getPath())).withColor(TextColor.WHITE), TextWidget::withLeftAlignment));
+                    layout.withChild(Widgets.textarea(abilityDescription(ability.getPath()), contentWidth));
                 });
     }
 
+    // todo change this to use registered ability description rather than hardcoded values now that they are datapacked
     private static Component abilityDescription(String ability) {
         return Component.literal(
                 switch (ability) {

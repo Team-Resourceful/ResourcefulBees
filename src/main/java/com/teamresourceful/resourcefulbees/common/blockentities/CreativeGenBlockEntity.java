@@ -5,7 +5,6 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockE
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
@@ -32,7 +31,7 @@ public class CreativeGenBlockEntity extends BlockEntity implements InstanceBlock
     }
 
     @Override
-    public void serverTick(Level level, BlockPos pos, BlockState state) {
+    public void serverTick(ServerLevel level, BlockPos pos, BlockState state) {
         if (level != null) {
             distributeEnergyNearby();
         }

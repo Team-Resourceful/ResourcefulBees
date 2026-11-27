@@ -40,7 +40,7 @@ public final class BeeTraits {
             return;
         }
 
-        int columns = Math.clamp((contentWidth + COLUMN_GAP) / (MIN_CARD_WIDTH + COLUMN_GAP), 1, 3);
+        int columns = Math.clamp((contentWidth + COLUMN_GAP) / (MIN_CARD_WIDTH + COLUMN_GAP), 1, 2);
 
         GridLayout grid = new GridLayout().columnSpacing(COLUMN_GAP).rowSpacing(ROW_GAP);
         GridLayout.RowHelper rows = grid.createRowHelper(columns);

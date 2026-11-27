@@ -17,7 +17,7 @@ public final class DummyHoneycombData {
         throw new UtilityClassException();
     }
 
-    public static final OutputVariation DUMMY_OUTPUT_VARIATION = new OutputVariation("template",
+    public static final OutputVariation DUMMY_OUTPUT_VARIATION = new OutputVariation(ModIdentifier.of("template"),
         Map.of(
             BeehiveTier.getOrThrow(ModIdentifier.of("t1")), ItemStackTemplate.fromNonEmptyStack(Items.HONEYCOMB.getDefaultInstance()),
             BeehiveTier.getOrThrow(ModIdentifier.of("t2")), ItemStackTemplate.fromNonEmptyStack(Items.HONEYCOMB.getDefaultInstance()),

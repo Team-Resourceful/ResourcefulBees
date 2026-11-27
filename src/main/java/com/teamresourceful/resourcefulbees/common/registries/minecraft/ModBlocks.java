@@ -8,13 +8,15 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
+import com.teamresourceful.resourcefulbees.common.registries.compat.NamespacedBlockRegistry;
+import com.teamresourceful.resourcefulbees.common.registries.compat.NamespacedBlockRegistryChild;
+import com.teamresourceful.resourcefulbees.common.registries.compat.NamespacedRegistration;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.fluid.data.FluidData;
 import com.teamresourceful.resourcefullib.common.registry.HolderRegistryEntry;
-import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
-import com.teamresourceful.resourcefullib.common.registry.builtin.ResourcefulBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
@@ -37,29 +39,31 @@ public final class ModBlocks {
         throw new UtilityClassException();
     }
 
-    public static final ResourcefulBlockRegistry BLOCKS = ResourcefulRegistries.createForBlocks(ModConstants.MOD_ID);
-    public static final ResourcefulBlockRegistry HIVES = ResourcefulRegistries.createForBlocks(BLOCKS);
-    public static final ResourcefulBlockRegistry APIARIES = ResourcefulRegistries.createForBlocks(BLOCKS);
-    public static final ResourcefulBlockRegistry CENTRIFUGE_BLOCKS = ResourcefulRegistries.createForBlocks(BLOCKS);
+    public static final NamespacedBlockRegistry BLOCKS = new NamespacedBlockRegistry(ModConstants.MOD_ID);
+    public static final NamespacedBlockRegistryChild HIVES = new NamespacedBlockRegistryChild(BLOCKS);
+    public static final NamespacedBlockRegistryChild APIARIES = new NamespacedBlockRegistryChild(BLOCKS);
+    public static final NamespacedBlockRegistryChild CENTRIFUGE_BLOCKS = new NamespacedBlockRegistryChild(BLOCKS);
 
-    public static final ResourcefulBlockRegistry HONEYCOMB_BLOCKS = ResourcefulRegistries.createForBlocks(BLOCKS);
-    public static final ResourcefulBlockRegistry HONEY_BLOCKS = ResourcefulRegistries.createForBlocks(BLOCKS);
-    public static final ResourcefulBlockRegistry HONEY_FLUID_BLOCKS = ResourcefulRegistries.createForBlocks(BLOCKS);
+    public static final NamespacedBlockRegistryChild HONEYCOMB_BLOCKS = new NamespacedBlockRegistryChild(BLOCKS);
+    public static final NamespacedBlockRegistryChild HONEY_BLOCKS = new NamespacedBlockRegistryChild(BLOCKS);
+    public static final NamespacedBlockRegistryChild HONEY_FLUID_BLOCKS = new NamespacedBlockRegistryChild(BLOCKS);
 
-    public static final BlockBehaviour.Properties WAXED_PLANKS_PROPERTIES = BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD);
-    public static final BlockBehaviour.Properties CENTRIFUGE_PROPERTIES = BlockBehaviour.Properties.of().strength(2).sound(SoundType.METAL);
+    private static final BlockBehaviour.Properties WAXED_PLANKS_PROPERTIES = BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD);
+    private static final BlockBehaviour.Properties CENTRIFUGE_PROPERTIES = BlockBehaviour.Properties.of().strength(2).sound(SoundType.METAL);
     private static final BlockBehaviour.Properties APIARY_PROPERTIES = BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(5f, 6f).mapColor(MapColor.WOOD);
-    public static final BlockBehaviour.Properties HONEY_FLUID_BLOCK_PROPERTIES = BlockBehaviour.Properties.of()
-            .mapColor(MapColor.TERRACOTTA_ORANGE)
-            .liquid()
-            .noOcclusion()
-            .noCollision()
-            .strength(100.0F)
-            .speedFactor(0.15F)
-            .noLootTable()
-            .replaceable()
-            .sound(SoundType.EMPTY)
-            .pushReaction(PushReaction.POPPED);
+    public static BlockBehaviour.Properties honeyFluidBlockProperties() {
+        return BlockBehaviour.Properties.of()
+                .mapColor(MapColor.TERRACOTTA_ORANGE)
+                .liquid()
+                .noOcclusion()
+                .noCollision()
+                .strength(100.0F)
+                .speedFactor(0.15F)
+                .noLootTable()
+                .replaceable()
+                .sound(SoundType.EMPTY)
+                .pushReaction(PushReaction.POPPED);
+    }
 
     public static final BlockBehaviour.Properties BEECON_PROPERTIES = BlockBehaviour.Properties.of()
             .instrument(NoteBlockInstrument.HAT)
@@ -86,8 +90,12 @@ public final class ModBlocks {
         return false;
     }
 
-    private static HolderRegistryEntry<Block> registerBlock(ResourcefulBlockRegistry registry, String id, Function<BlockBehaviour.Properties, Block> factory, Supplier<BlockBehaviour.Properties> getter) {
-        ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, ModIdentifier.of(id));
+    private static HolderRegistryEntry<Block> registerBlock(NamespacedRegistration<Block> registry, String id, Function<BlockBehaviour.Properties, Block> factory, Supplier<BlockBehaviour.Properties> getter) {
+        return registerBlock(registry, ModIdentifier.of(id), factory, getter);
+    }
+
+    private static HolderRegistryEntry<Block> registerBlock(NamespacedRegistration<Block> registry, Identifier id, Function<BlockBehaviour.Properties, Block> factory, Supplier<BlockBehaviour.Properties> getter) {
+        ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, id);
         return registry.registerHolder(id,() -> factory.apply(getter.get().setId(key)));
     }
 
@@ -95,8 +103,8 @@ public final class ModBlocks {
         return registerBlock(HIVES, id, properties -> createNest(DefaultBeehiveTiers.ordinalOf(tier), properties), hiveProps);
     }
 
-    public static void registerHoneyFluidBlock(String id, HoneyFluidData honeyFluidData, FluidData fluidType) {
-        registerBlock(HONEY_FLUID_BLOCKS, id, properties -> new CustomHoneyFluidBlock(fluidType, properties, honeyFluidData), () -> HONEY_FLUID_BLOCK_PROPERTIES);
+    public static void registerHoneyFluidBlock(Identifier id, HoneyFluidData honeyFluidData, FluidData fluidType) {
+        registerBlock(HONEY_FLUID_BLOCKS, id, properties -> new CustomHoneyFluidBlock(fluidType, properties, honeyFluidData), ModBlocks::honeyFluidBlockProperties);
     }
 
     public static final HolderRegistryEntry<Block> T1_APIARY_BLOCK = registerBlock(APIARIES, "apiary/1", properties -> new ApiaryBlock(DefaultApiaryTiers.T1_APIARY, properties), () -> APIARY_PROPERTIES);
@@ -149,6 +157,7 @@ public final class ModBlocks {
     public static final HolderRegistryEntry<Block> CENTRIFUGE_CRANK = registerBlock(CENTRIFUGE_BLOCKS, "centrifuge_crank", CentrifugeCrankBlock::new, () -> BlockBehaviour.Properties.of().strength(2).sound(SoundType.WOOD).noOcclusion());
     public static final HolderRegistryEntry<Block> HONEY_GENERATOR = registerBlock(BLOCKS, "honey_generator", HoneyGeneratorBlock::new, () -> CENTRIFUGE_PROPERTIES);
 
-    public static final HolderRegistryEntry<Block> HONEY_FLUID_BLOCK = registerBlock(HONEY_FLUID_BLOCKS, "honey_fluid_block", properties -> new HoneyFluidBlock(ModFluids.HONEY_FLUID_TYPE.get(), properties), () -> HONEY_FLUID_BLOCK_PROPERTIES);
+    public static final HolderRegistryEntry<Block> HONEY_FLUID_BLOCK = registerBlock(HONEY_FLUID_BLOCKS, "honey_fluid_block", properties -> new HoneyFluidBlock(ModFluids.HONEY_FLUID_TYPE.get(), properties), ModBlocks::honeyFluidBlockProperties);
 
+    public static final HolderRegistryEntry<Block> COLONY_CONTROLLER = registerBlock(BLOCKS, "colony_controller", ColonyControllerBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(3.0F, 6.0F).sound(SoundType.WOOD).requiresCorrectToolForDrops());
 }

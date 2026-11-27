@@ -22,7 +22,7 @@
         ]
     },
     "resourcefulbees:trait/v1": {
-        "traits": ["zombie"]
+        "traits": ["resourcefulbees:zombie"]
     },
     "resourcefulbees:trade/v1": {
         "amount": {

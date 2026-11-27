@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.api.registry;
 
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
+import net.minecraft.resources.Identifier;
 
 import java.util.Map;
 import java.util.Set;
@@ -25,7 +26,7 @@ public interface TraitRegistry {
      * @param data BeeTrait of the trait being registered
      * @return Returns false if trait already exists in the registry.
      */
-    boolean register(String name, Trait data);
+    boolean register(Identifier name, Trait data);
 
     /**
      * Returns a BeeTrait object for the given trait name.
@@ -33,7 +34,7 @@ public interface TraitRegistry {
      * @param name Trait name for which BeeTrait is requested.
      * @return Returns a BeeTrait object for the given bee type.
      */
-    Trait getTrait(String name);
+    Trait getTrait(Identifier name);
 
     /**
      * Returns an unmodifiable copy of the Trait Registry.
@@ -41,7 +42,7 @@ public interface TraitRegistry {
      *
      * @return Returns unmodifiable copy of trait registry.
      */
-    Map<String, Trait> getTraits();
+    Map<Identifier, Trait> getTraits();
 
     /**
      * A helper method that returns an unmodifiable set of the values contained in the internal

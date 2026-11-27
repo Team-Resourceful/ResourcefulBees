@@ -1,7 +1,7 @@
 {
   "displayItem": "minecraft:nether_star",
   "specialAbilities": [
-    "spider"
+    "resourcefulbees:spider"
   ],
   "particles": [
     "minecraft:end_rod"

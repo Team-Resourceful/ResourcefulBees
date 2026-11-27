@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.base.HoneyData;
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -14,7 +15,7 @@ import java.util.Set;
 
 public interface HoneyFluidData extends HoneyData<HoneyFluidData> {
 
-    String id();
+    Identifier id();
 
     HoneyRenderData renderData();
 

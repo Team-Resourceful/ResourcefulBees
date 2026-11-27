@@ -23,7 +23,7 @@
     ]
   },
   "resourcefulbees:trait/v1": {
-    "traits" : ["creeper"]
+    "traits" : ["resourcefulbees:creeper"]
   },
   "resourcefulbees:trade/v1": {
     "amount": {

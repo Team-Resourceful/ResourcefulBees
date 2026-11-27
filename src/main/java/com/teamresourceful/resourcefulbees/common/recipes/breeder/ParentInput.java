@@ -47,6 +47,8 @@ public record ParentInput(
     );
 
     public boolean matches(ItemStack input, ItemStack feedItem) {
-        return parent().test(input) && feedItems.test(feedItem);
+        return parent().test(input)
+                && feedItems.test(feedItem)
+                && feedItem.getCount() >= feedAmount;
     }
 }

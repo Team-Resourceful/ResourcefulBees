@@ -25,6 +25,6 @@
     },
     "resourcefulbees:trait/v1": {
         "hasTraits": true,
-        "traits": ["nether", "wither"]
+        "traits": ["resourcefulbees:nether", "resourcefulbees:wither"]
     }
 }

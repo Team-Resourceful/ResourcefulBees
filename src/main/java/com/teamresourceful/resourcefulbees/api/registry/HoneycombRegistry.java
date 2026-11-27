@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.api.registry;
 
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStackTemplate;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,18 +18,12 @@ public interface HoneycombRegistry {
     }
 
     /**
-     * Returns an unmodifiable copy of the Honey Registry.
-     * This is useful for iterating over all honey without worry of changing data
+     * Returns an unmodifiable copy of the Honeycomb Variation Registry.
+     * This is useful for iterating over all Variations without worry of changing data
      *
-     *  @return Returns unmodifiable copy of honey registry.
+     *  @return Returns unmodifiable copy of honeycomb variation registry.
      */
-    Map<String, OutputVariation> getData();
-
-    @Deprecated
-    @Nullable
-    default OutputVariation getOutputVariation(String name) {
-        return getHoneycomb(name);
-    }
+    Map<Identifier, OutputVariation> getVariationData();
 
     /**
      * Returns the OutputVariation for the given name.
@@ -37,15 +32,15 @@ public interface HoneycombRegistry {
      * @return Returns the OutputVariation for the given name.
      */
     @Nullable
-    OutputVariation getHoneycomb(String name);
+    OutputVariation getHoneycombVariation(Identifier name);
 
     /**
-     * Returns weather a honeycomb with the given name is registered.
+     * Returns weather a honeycomb variation with the given name is registered.
      *
-     * @param name The name of the honeycomb to check.
-     * @return Returns weather a honeycomb with the given name is registered.
+     * @param name The name of the honeycomb variation to check.
+     * @return Returns `true` if a honeycomb variation with the given name is registered.
      */
-    boolean containsHoneycomb(String name);
+    boolean containsVariation(Identifier name);
 
     /**
      * Returns a set containing all registered OutputVariation.
@@ -53,17 +48,17 @@ public interface HoneycombRegistry {
      *
      * @return Returns a set containing all registered OutputVariation.
      */
-    Set<OutputVariation> getSetOfHoneycombs();
+    Set<OutputVariation> getSetOfVariations();
 
     /**
-     * A helper method that returns a stream using the {@link HoneycombRegistry#getSetOfHoneycombs()} method.
+     * A helper method that returns a stream using the {@link HoneycombRegistry#getSetOfVariations()} method.
      */
-    Stream<OutputVariation> getStreamOfHoneycombs();
+    Stream<OutputVariation> getStreamOfVariations();
 
     /**
-     * @return Returns a set containing all registered honeycombs ids.
+     * @return Returns an immutable set containing all registered honeycomb variation ids.
      */
-    Set<String> getHoneycombTypes();
+    Set<Identifier> getVariationIDs();
 
-    void validateDefaults(String id, Optional<ItemStackTemplate> defaultComb, Optional<ItemStackTemplate> defaultCombBlock);
+    void validateDefaults(Identifier id, Optional<ItemStackTemplate> defaultComb, Optional<ItemStackTemplate> defaultCombBlock);
 }

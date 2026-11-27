@@ -23,9 +23,7 @@ public interface CustomBee {
 
     CustomBeeData getBeeData();
 
-    default Identifier getBeeType() {
-        return getBeeData().id();
-    }
+    Identifier getBeeType();
 
     default BeeCoreData getCoreData() {
         return getBeeData().getCoreData();
