@@ -49,7 +49,7 @@ public final class CourierPhysicalEnergyGameTests {
     }
 
     private static void assertResult(GameTestHelper helper, TransferResult result, TransferStatus status, int moved) {
-        helper.assertTrue(result.status() == status && result.itemsMoved() == moved, "Expected " + status + "/" + moved + ", got " + result.status() + "/" + result.itemsMoved());
+        helper.assertTrue(result.status() == status && result.amountMoved() == moved, "Expected " + status + "/" + moved + ", got " + result.status() + "/" + result.amountMoved());
     }
 
     private static CourierRoute energyRoute(BlockPos source, BlockPos destination) {
@@ -183,13 +183,13 @@ public final class CourierPhysicalEnergyGameTests {
         int sourceAfter = generator.battery().getAmountAsInt();
         int cargoAfter = bee.getCourierEnergyCargo().getAmountAsInt();
 
-        helper.assertTrue(result.itemsMoved() > 0, "Courier did not pick up energy");
+        helper.assertTrue(result.amountMoved() > 0, "Courier did not pick up energy");
 
-        helper.assertTrue(sourceBefore - sourceAfter == result.itemsMoved(), "Source energy mismatch");
+        helper.assertTrue(sourceBefore - sourceAfter == result.amountMoved(), "Source energy mismatch");
 
-        helper.assertTrue(cargoAfter - cargoBefore == result.itemsMoved(), "Bee cargo energy mismatch");
+        helper.assertTrue(cargoAfter - cargoBefore == result.amountMoved(), "Bee cargo energy mismatch");
 
-        helper.assertTrue(result.itemsMoved() <= 500, "Courier exceeded pickup limit");
+        helper.assertTrue(result.amountMoved() <= 500, "Courier exceeded pickup limit");
 
         helper.succeed();
     }

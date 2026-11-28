@@ -49,7 +49,7 @@ public final class CourierPhysicalFluidGameTests {
     }
 
     private static void result(GameTestHelper h, TransferResult actual, TransferStatus status, int moved) {
-        h.assertTrue(actual.status() == status && actual.itemsMoved() == moved, "Expected " + status + "/" + moved + ", got " + actual.status() + "/" + actual.itemsMoved());
+        h.assertTrue(actual.status() == status && actual.amountMoved() == moved, "Expected " + status + "/" + moved + ", got " + actual.status() + "/" + actual.amountMoved());
     }
 
     private static CourierRoute route(GameTestHelper h, CourierResourceType type) {

@@ -91,7 +91,7 @@ public final class CourierDeliveryExecutorGameTests {
 
         var result = CourierDeliveryExecutor.pickup(helper.getLevel(), route(helper), cargo, 16);
 
-        if (result.itemsMoved() != 16 || result.status() != TransferStatus.SUCCESS || count(source) != 16 || cargo.getAmountAsInt(0) != 16) {
+        if (result.amountMoved() != 16 || result.status() != TransferStatus.SUCCESS || count(source) != 16 || cargo.getAmountAsInt(0) != 16) {
             helper.fail("Courier pickup failed");
             return;
         }
@@ -109,7 +109,7 @@ public final class CourierDeliveryExecutorGameTests {
 
         var result = CourierDeliveryExecutor.deliver(helper.getLevel(), route(helper), cargo, 16);
 
-        if (result.itemsMoved() != 16 || result.status() != TransferStatus.SUCCESS || cargo.getAmountAsInt(0) != 0 || count(destination) != 16) {
+        if (result.amountMoved() != 16 || result.status() != TransferStatus.SUCCESS || cargo.getAmountAsInt(0) != 0 || count(destination) != 16) {
             helper.fail("Courier delivery failed");
             return;
         }
@@ -129,7 +129,7 @@ public final class CourierDeliveryExecutorGameTests {
 
         var result = CourierDeliveryExecutor.pickup(helper.getLevel(), route(helper), cargo, 16);
 
-        if (result.itemsMoved() != 0 || count(source) != 32 || cargo.getAmountAsInt(0) != 8) {
+        if (result.amountMoved() != 0 || count(source) != 32 || cargo.getAmountAsInt(0) != 8) {
             helper.fail("Occupied courier picked up more items");
             return;
         }
@@ -148,7 +148,7 @@ public final class CourierDeliveryExecutorGameTests {
 
         var result = CourierDeliveryExecutor.deliver(helper.getLevel(), route(helper), cargo, 16);
 
-        if (result.status() != TransferStatus.DESTINATION_UNAVAILABLE || result.itemsMoved() != 0 || cargo.getAmountAsInt(0) != 12 || !cargo.getResource(0).equals(IRON)) {
+        if (result.status() != TransferStatus.DESTINATION_UNAVAILABLE || result.amountMoved() != 0 || cargo.getAmountAsInt(0) != 12 || !cargo.getResource(0).equals(IRON)) {
             helper.fail("Courier lost cargo when destination was unavailable");
             return;
         }
@@ -173,7 +173,7 @@ public final class CourierDeliveryExecutorGameTests {
 
         var result = CourierDeliveryExecutor.pickup(bee, route(helper), 16);
 
-        if (result.itemsMoved() != 0 || count(source) != 16 || bee.getCourierCargo().getAmountAsInt(0) != 0) {
+        if (result.amountMoved() != 0 || count(source) != 16 || bee.getCourierCargo().getAmountAsInt(0) != 0) {
             helper.fail("Courier picked up items remotely");
             return;
         }
@@ -207,7 +207,7 @@ public final class CourierDeliveryExecutorGameTests {
 
         var result = CourierDeliveryExecutor.deliver(bee, route(helper), 16);
 
-        if (result.itemsMoved() != 0 || bee.getCourierCargo().getAmountAsInt(0) != 16 || count(destination) != 0) {
+        if (result.amountMoved() != 0 || bee.getCourierCargo().getAmountAsInt(0) != 16 || count(destination) != 0) {
             helper.fail("Courier delivered items remotely");
             return;
         }

@@ -114,7 +114,7 @@ public final class CourierDeliveryGoal extends Goal {
 
                 var result = CourierDeliveryExecutor.pickup(bee, route, transferLimit(route.resourceType()));
 
-                if (result.itemsMoved() > 0) {
+                if (result.amountMoved() > 0) {
                     delivery.pickupSucceeded();
                     repathCooldown = 0;
                 } else if (result.status() == TransferStatus.SOURCE_EMPTY) {
@@ -152,7 +152,7 @@ public final class CourierDeliveryGoal extends Goal {
                 if (isCargoEmpty(route)) {
                     delivery.deliverySucceeded();
                     repathCooldown = 0;
-                } else if (result.itemsMoved() == 0) {
+                } else if (result.amountMoved() == 0) {
                     // The destination cannot currently accept
                     // any cargo. Preserve it and wait to retry.
                     delivery.block();
@@ -258,28 +258,10 @@ public final class CourierDeliveryGoal extends Goal {
         bee.getNavigation().stop();
     }
 
-    private boolean hasPendingRouteUpdate(ServerLevel level, CourierRoute route) {
-        BlockPos controllerPos = bee.getColonyControllerPos();
-
-        if (controllerPos == null || !level.hasChunkAt(controllerPos)) {
-            return false;
-        }
-
-        if (!(level.getBlockEntity(controllerPos) instanceof ColonyControllerBlockEntity controller)) {
-            return false;
-        }
-
-        CourierDeliveryController delivery = bee.getCourierDelivery();
-        var assignment = delivery.getAssignment();
-
-        return assignment != null && controller.getColonyId().equals(assignment.colonyId()) && controller.isCourierRegistered(bee.getUUID()) && controller.hasPendingRouteUpdate(route.id());
-    }
-
     private ColonyControllerBlockEntity getCourierController(ServerLevel level) {
         BlockPos controllerPos = bee.getColonyControllerPos();
 
-        if (controllerPos == null
-                || !level.hasChunkAt(controllerPos)) {
+        if (controllerPos == null || !level.hasChunkAt(controllerPos)) {
             return null;
         }
 

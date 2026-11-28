@@ -34,7 +34,7 @@ public final class CourierEnergyTransferGameTests {
     }
 
     private static void expect(GameTestHelper h, TransferResult actual, TransferStatus status, int moved) {
-        h.assertTrue(actual.status() == status && actual.itemsMoved() == moved, "Expected " + status + "/" + moved + ", got " + actual.status() + "/" + actual.itemsMoved());
+        h.assertTrue(actual.status() == status && actual.amountMoved() == moved, "Expected " + status + "/" + moved + ", got " + actual.status() + "/" + actual.amountMoved());
     }
 
     private static CourierRoute route(long id, CourierResourceType type, int priority, boolean enabled) {

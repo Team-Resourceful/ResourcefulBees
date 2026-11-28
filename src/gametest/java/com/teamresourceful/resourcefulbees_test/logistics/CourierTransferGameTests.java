@@ -51,8 +51,8 @@ public final class CourierTransferGameTests {
 
         var result = CourierTransferEngine.transfer(helper.getLevel(), route, 16);
 
-        if (result.itemsMoved() != 16) {
-            helper.fail("Expected 16 transferred items, got " + result.itemsMoved());
+        if (result.amountMoved() != 16) {
+            helper.fail("Expected 16 transferred items, got " + result.amountMoved());
             return;
         }
 
@@ -87,7 +87,7 @@ public final class CourierTransferGameTests {
 
         var result = CourierTransferEngine.transfer(helper.getLevel(), route, 16);
 
-        if (result.status() != TransferStatus.DISABLED || result.itemsMoved() != 0) {
+        if (result.status() != TransferStatus.DISABLED || result.amountMoved() != 0) {
             helper.fail("Disabled route performed a transfer");
             return;
         }
@@ -118,8 +118,8 @@ public final class CourierTransferGameTests {
 
         var result = CourierTransferEngine.transfer(helper.getLevel(), route, 16);
 
-        if (result.status() != TransferStatus.PARTIAL || result.itemsMoved() != 5) {
-            helper.fail("Expected PARTIAL transfer of 5, got " + result.status() + " / " + result.itemsMoved());
+        if (result.status() != TransferStatus.PARTIAL || result.amountMoved() != 5) {
+            helper.fail("Expected PARTIAL transfer of 5, got " + result.status() + " / " + result.amountMoved());
             return;
         }
 
@@ -145,7 +145,7 @@ public final class CourierTransferGameTests {
 
         var result = CourierTransferEngine.transfer(helper.getLevel(), route, 16);
 
-        if (result.status() != TransferStatus.DESTINATION_FULL || result.itemsMoved() != 0) {
+        if (result.status() != TransferStatus.DESTINATION_FULL || result.amountMoved() != 0) {
             helper.fail("Expected DESTINATION_FULL with zero items moved");
             return;
         }
@@ -168,7 +168,7 @@ public final class CourierTransferGameTests {
 
         var result = CourierTransferEngine.transfer(helper.getLevel(), route, 4);
 
-        if (result.itemsMoved() != 4 || result.status() != TransferStatus.SUCCESS) {
+        if (result.amountMoved() != 4 || result.status() != TransferStatus.SUCCESS) {
             helper.fail("Expected exactly 4 transferred items");
             return;
         }
@@ -196,7 +196,7 @@ public final class CourierTransferGameTests {
         for (int attempt = 0; attempt < 8; attempt++) {
             var result = CourierTransferEngine.transfer(helper.getLevel(), route, 16);
 
-            totalMoved += result.itemsMoved();
+            totalMoved += result.amountMoved();
 
             int currentTotal = countItems(source) + countItems(destination);
 
@@ -225,7 +225,7 @@ public final class CourierTransferGameTests {
 
         var result = CourierTransferEngine.transfer(helper.getLevel(), route, 16);
 
-        if (result.itemsMoved() != 16) {
+        if (result.amountMoved() != 16) {
             helper.fail("Expected 16 iron ingots transferred");
             return;
         }
@@ -262,7 +262,7 @@ public final class CourierTransferGameTests {
 
         var result = CourierTransferEngine.transfer(helper.getLevel(), route, 16);
 
-        if (result.status() != TransferStatus.DESTINATION_UNAVAILABLE || result.itemsMoved() != 0) {
+        if (result.status() != TransferStatus.DESTINATION_UNAVAILABLE || result.amountMoved() != 0) {
             helper.fail("Expected DESTINATION_UNAVAILABLE");
             return;
         }
@@ -283,7 +283,7 @@ public final class CourierTransferGameTests {
 
             var result = CourierTransferEngine.transfer(helper.getLevel(), route, 16);
 
-            if (result.status() != TransferStatus.UNSUPPORTED_RESOURCE || result.itemsMoved() != 0) {
+            if (result.status() != TransferStatus.UNSUPPORTED_RESOURCE || result.amountMoved() != 0) {
                 helper.fail("Expected unsupported resource rejection for " + type);
                 return;
             }

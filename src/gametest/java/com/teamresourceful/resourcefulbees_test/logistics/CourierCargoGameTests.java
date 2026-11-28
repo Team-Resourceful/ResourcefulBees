@@ -105,14 +105,14 @@ public final class CourierCargoGameTests {
 
         var pickup = CourierTransferEngine.transferItems(source, cargo, 16);
 
-        if (pickup.itemsMoved() != 16) {
+        if (pickup.amountMoved() != 16) {
             helper.fail("Pickup did not move 16 items into cargo");
             return;
         }
 
         var delivery = CourierTransferEngine.transferItems(cargo, destination, 16);
 
-        if (delivery.itemsMoved() != 16) {
+        if (delivery.amountMoved() != 16) {
             helper.fail("Delivery did not move 16 items out of cargo");
             return;
         }
@@ -201,7 +201,7 @@ public final class CourierCargoGameTests {
 
         var result = CourierTransferEngine.transferItems(cargo, destination, 16);
 
-        if (result.itemsMoved() != 4 || result.status() != TransferStatus.PARTIAL || cargo.getAmountAsInt(0) != 12 || destination.getAmountAsInt(0) != 64) {
+        if (result.amountMoved() != 4 || result.status() != TransferStatus.PARTIAL || cargo.getAmountAsInt(0) != 12 || destination.getAmountAsInt(0) != 64) {
             helper.fail("Partial delivery did not preserve remaining cargo");
             return;
         }
@@ -218,7 +218,7 @@ public final class CourierCargoGameTests {
 
         var result = CourierTransferEngine.transferItems(cargo, destination, 16);
 
-        if (result.itemsMoved() != 0 || result.status() != TransferStatus.DESTINATION_FULL || cargo.getAmountAsInt(0) != 16 || !cargo.getResource(0).equals(ItemResource.of(Items.IRON_INGOT)) || destination.getAmountAsInt(0) != 32 || !destination.getResource(0).equals(ItemResource.of(Items.GOLD_INGOT))) {
+        if (result.amountMoved() != 0 || result.status() != TransferStatus.DESTINATION_FULL || cargo.getAmountAsInt(0) != 16 || !cargo.getResource(0).equals(ItemResource.of(Items.IRON_INGOT)) || destination.getAmountAsInt(0) != 32 || !destination.getResource(0).equals(ItemResource.of(Items.GOLD_INGOT))) {
             helper.fail("Rejected delivery changed inventory contents");
             return;
         }

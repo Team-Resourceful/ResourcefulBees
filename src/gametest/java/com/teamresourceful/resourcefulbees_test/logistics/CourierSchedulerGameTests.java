@@ -628,7 +628,7 @@ public final class CourierSchedulerGameTests {
             return;
         }
 
-        if (result.itemsMoved() != 0) {
+        if (result.amountMoved() != 0) {
             helper.fail("Double-chest self-transfer moved items");
             return;
         }

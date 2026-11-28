@@ -47,7 +47,7 @@ public final class CourierFluidFilterGameTests {
     }
 
     private static int move(FluidStacksResourceHandler source, FluidStacksResourceHandler destination, CourierFilter filter) {
-        return CourierFluidTransferEngine.transferFluids(source, destination, AMOUNT, filter).itemsMoved();
+        return CourierFluidTransferEngine.transferFluids(source, destination, AMOUNT, filter).amountMoved();
     }
 
     public static void noneAccepts(GameTestHelper helper) {

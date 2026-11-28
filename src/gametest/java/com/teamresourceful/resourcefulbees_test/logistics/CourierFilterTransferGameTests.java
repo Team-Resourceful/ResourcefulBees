@@ -82,7 +82,7 @@ public final class CourierFilterTransferGameTests {
 
         var result = CourierTransferEngine.transferItems(f.sourceHandler(), f.destinationHandler(), 16, allowed(ironWhitelist()));
 
-        helper.assertTrue(result.itemsMoved() == 12, "Expected 12 eligible iron ingots to transfer");
+        helper.assertTrue(result.amountMoved() == 12, "Expected 12 eligible iron ingots to transfer");
 
         assertStack(helper, f.source().getItem(0), Items.GOLD_INGOT, 8, "Excluded gold was modified");
 
@@ -101,7 +101,7 @@ public final class CourierFilterTransferGameTests {
 
         var result = CourierTransferEngine.transferItems(f.sourceHandler(), f.destinationHandler(), 16, allowed(ironWhitelist()));
 
-        helper.assertTrue(result.status() == TransferStatus.SOURCE_EMPTY && result.itemsMoved() == 0, "Expected SOURCE_EMPTY with zero transferred items");
+        helper.assertTrue(result.status() == TransferStatus.SOURCE_EMPTY && result.amountMoved() == 0, "Expected SOURCE_EMPTY with zero transferred items");
 
         assertStack(helper, f.source().getItem(0), Items.GOLD_INGOT, 8, "Rejected source items were modified");
 
@@ -125,7 +125,7 @@ public final class CourierFilterTransferGameTests {
 
         var result = CourierTransferEngine.transferItems(f.sourceHandler(), f.destinationHandler(), 16, allowed(ironWhitelist()));
 
-        helper.assertTrue(result.status() == TransferStatus.PARTIAL && result.itemsMoved() == 4, "Expected a partial transfer of four items");
+        helper.assertTrue(result.status() == TransferStatus.PARTIAL && result.amountMoved() == 4, "Expected a partial transfer of four items");
 
         assertStack(helper, f.source().getItem(0), Items.IRON_INGOT, 12, "Source did not retain the remaining 12 iron");
 
@@ -146,7 +146,7 @@ public final class CourierFilterTransferGameTests {
 
         var result = CourierTransferEngine.transferItems(f.sourceHandler(), f.destinationHandler(), 16, allowed(ironWhitelist()));
 
-        helper.assertTrue(result.status() == TransferStatus.DESTINATION_FULL && result.itemsMoved() == 0, "Expected full destination to reject transfer");
+        helper.assertTrue(result.status() == TransferStatus.DESTINATION_FULL && result.amountMoved() == 0, "Expected full destination to reject transfer");
 
         assertStack(helper, f.source().getItem(0), Items.IRON_INGOT, 16, "Failed transfer consumed source items");
 
@@ -170,7 +170,7 @@ public final class CourierFilterTransferGameTests {
 
         var result = CourierDeliveryExecutor.pickup(f.level(), route, cargo, 16);
 
-        helper.assertTrue(result.itemsMoved() == 12, "Courier did not pick up 12 permitted iron ingots");
+        helper.assertTrue(result.amountMoved() == 12, "Courier did not pick up 12 permitted iron ingots");
 
         helper.assertTrue(cargo.getAmountAsInt(0) == 12 && cargo.getResource(0).equals(ItemResource.of(new ItemStack(Items.IRON_INGOT))), "Courier cargo contains incorrect items");
 
@@ -196,7 +196,7 @@ public final class CourierFilterTransferGameTests {
 
         var result = CourierDeliveryExecutor.deliver(f.level(), route, cargo, 16);
 
-        helper.assertTrue(result.itemsMoved() == 8, "Existing cargo was incorrectly blocked by the filter");
+        helper.assertTrue(result.amountMoved() == 8, "Existing cargo was incorrectly blocked by the filter");
 
         helper.assertTrue(cargo.getAmountAsInt(0) == 0, "Delivered cargo was not removed from courier");
 

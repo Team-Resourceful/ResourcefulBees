@@ -83,7 +83,7 @@ public final class CourierFluidWorldIntegrationGameTests {
         assign(h, f);
         moveTo(f.bee, f.route.source().pos());
         var result = CourierDeliveryExecutor.pickup(f.bee, f.route, 800);
-        h.assertTrue(result.itemsMoved() == 800, "World pickup failed: " + result);
+        h.assertTrue(result.amountMoved() == 800, "World pickup failed: " + result);
         h.assertTrue(f.source.tank().getAmountAsInt(0) == 0, "Source did not drain");
         h.assertTrue(f.bee.getCourierFluidCargo().getAmountAsInt(0) == 800, "Bee did not receive fluid");
         h.succeed();
@@ -98,7 +98,7 @@ public final class CourierFluidWorldIntegrationGameTests {
         }
         moveTo(f.bee, f.route.destination().pos());
         var result = CourierDeliveryExecutor.deliver(f.bee, f.route, 600);
-        h.assertTrue(result.itemsMoved() == 600, "World delivery failed: " + result);
+        h.assertTrue(result.amountMoved() == 600, "World delivery failed: " + result);
         h.assertTrue(f.destination.tank().getAmountAsInt(0) == 600, "Destination did not receive fluid");
         h.assertTrue(f.bee.getCourierFluidCargo().getAmountAsInt(0) == 0, "Cargo not emptied");
         h.succeed();
@@ -111,12 +111,12 @@ public final class CourierFluidWorldIntegrationGameTests {
         h.assertTrue(delivery.getState() == CourierState.TRAVELING_TO_SOURCE, "Not traveling to source");
         moveTo(f.bee, f.route.source().pos());
         delivery.arriveAtSource();
-        h.assertTrue(CourierDeliveryExecutor.pickup(f.bee, f.route, 500).itemsMoved() == 500, "Pickup failed");
+        h.assertTrue(CourierDeliveryExecutor.pickup(f.bee, f.route, 500).amountMoved() == 500, "Pickup failed");
         delivery.pickupSucceeded();
         h.assertTrue(delivery.getState() == CourierState.TRAVELING_TO_DESTINATION, "Not traveling to destination");
         moveTo(f.bee, f.route.destination().pos());
         delivery.arriveAtDestination();
-        h.assertTrue(CourierDeliveryExecutor.deliver(f.bee, f.route, 500).itemsMoved() == 500, "Delivery failed");
+        h.assertTrue(CourierDeliveryExecutor.deliver(f.bee, f.route, 500).amountMoved() == 500, "Delivery failed");
         delivery.deliverySucceeded();
         h.assertTrue(f.destination.tank().getAmountAsInt(0) == 500, "Destination amount wrong");
         h.assertTrue(f.source.tank().getAmountAsInt(0) == 0, "Source amount wrong");

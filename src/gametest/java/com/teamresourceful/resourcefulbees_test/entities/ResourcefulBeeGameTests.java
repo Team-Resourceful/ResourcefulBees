@@ -2147,8 +2147,8 @@ public class ResourcefulBeeGameTests {
         int sourceAfterFirst = source.getAmountAsInt(0);
         int destinationAfterFirst = destination.getAmountAsInt(0);
 
-        if (first.status() != TransferStatus.PARTIAL || first.itemsMoved() != 5) {
-            helper.fail("Unexpected partial transfer result: " + "status=" + first.status() + ", moved=" + first.itemsMoved());
+        if (first.status() != TransferStatus.PARTIAL || first.amountMoved() != 5) {
+            helper.fail("Unexpected partial transfer result: " + "status=" + first.status() + ", moved=" + first.amountMoved());
             return;
         }
 
@@ -2164,8 +2164,8 @@ public class ResourcefulBeeGameTests {
         int sourceAfterSecond = source.getAmountAsInt(0);
         int destinationAfterSecond = destination.getAmountAsInt(0);
 
-        if (second.status() != TransferStatus.DESTINATION_FULL || second.itemsMoved() != 0) {
-            helper.fail("Unexpected full-destination result: " + "status=" + second.status() + ", moved=" + second.itemsMoved());
+        if (second.status() != TransferStatus.DESTINATION_FULL || second.amountMoved() != 0) {
+            helper.fail("Unexpected full-destination result: " + "status=" + second.status() + ", moved=" + second.amountMoved());
             return;
         }
 

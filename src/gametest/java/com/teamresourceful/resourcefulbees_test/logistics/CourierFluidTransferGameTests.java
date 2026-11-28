@@ -55,7 +55,7 @@ public final class CourierFluidTransferGameTests {
     }
 
     private static void status(GameTestHelper helper, TransferResult result, TransferStatus expected, int moved) {
-        helper.assertTrue(result.status() == expected && result.itemsMoved() == moved, "Expected " + expected + "/" + moved + ", got " + result.status() + "/" + result.itemsMoved());
+        helper.assertTrue(result.status() == expected && result.amountMoved() == moved, "Expected " + expected + "/" + moved + ", got " + result.status() + "/" + result.amountMoved());
     }
 
     private static CourierRoute route(long id, CourierResourceType type, int priority) {
